@@ -1,0 +1,64 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<main id="main">
+    <section class="breadcrumbs">
+    </section>
+</main>
+<section id="blog" class="blog">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="overflow-auto" style="max-width: 100%; max-height: 600px;">
+          {% for post_conversation in conversations %}
+              <div class="card">
+                  <div class="card-body">
+                      <div class="d-flex">
+                          <img style="width: 15%; height: 15%; padding-right: 12px;" src="{{ post_conversation.post.author.profile.user_image.url }}" alt="">
+                          <div>
+                              <b>{{ post_conversation.post.author.username }}</b>
+                              <p>Conversation regarding {{ post_conversation.post.title }}</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          {% empty %}
+              <p>No conversations yet.</p>
+          {% endfor %}
+
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="container" data-aos="fade-up">
+          <h6>{{ post.title }}</h6>
+          <div class="overflow-auto" style="max-width: 100%; max-height: 450px;">
+            {% for message in messages %}
+                {% if message.sender == request.user %}
+                    <div class="sender-message">
+                        <p>{{ message.sender }} - {{ message.body }}</p>
+                    </div>
+                {% else %}
+                    <div class="recipient-message">
+                        <p>{{ message.sender }} - {{ message.body }}</p>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p>No messages yet.</p>
+            {% endfor %}
+          </div>
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="body">Message:</label>
+              <textarea class="form-control" id="body" name="body" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+</section>
+{% endblock %}

@@ -1,0 +1,1287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Ensocio</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
+    <!-- =======================================================
+  * Template Name: FlexStart - v1.12.0
+  * Template URL: https://bootstrapmade.com/flexstart-bootstrap-startup-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top">
+        <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+            <a href="/" class="logo d-flex align-items-center">
+                <img src="{% static 'assets/img/logo.png' %}" alt="">
+                <span>Ensocio</span>
+            </a>
+
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a class="nav-link scrollto " href="#hero">Inicio</a></li>
+                    <li><a class="nav-link scrollto" href="#about">Sobre nosotros</a></li>
+                    <li><a class="nav-link scrollto" href="#services">Servicios</a></li>
+                    <li><a class="nav-link scrollto" href="#team">Equipo</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li class="dropdown"><a href="#"><span>Cuenta</span> <i class="bi bi-chevron-down"></i></a>
+                        <ul>
+                            {% if user.is_authenticated %}
+                            <li><a href="{% url 'profile' %}">{{ request.user.username }}</a></li>
+                            {% else %}
+                            <li><a href="{% url 'user_login' %}">User</a></li>
+                            {% endif %}
+                            <!-- <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i
+                                        class="bi bi-chevron-right"></i></a>
+                                <ul>
+                                    <li><a href="#">Deep Drop Down 1</a></li>
+                                    <li><a href="#">Deep Drop Down 2</a></li>
+                                    <li><a href="#">Deep Drop Down 3</a></li>
+                                    <li><a href="#">Deep Drop Down 4</a></li>
+                                    <li><a href="#">Deep Drop Down 5</a></li>
+                                </ul>
+                            </li> -->
+                            <li><a href="{% url 'inbox' %}">Inbox</a></li>
+                            <li><a href="{% url 'delete_account' %}">Borrar cuenta</a></li>
+                            <li><a href="{% url 'password_change' %}">Cambiar contraseña</a></li>
+                        </ul>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li><a class="getstarted scrollto" href="{% url 'user_logout' %}">Cerrar sesión</a></li>
+                    {% else %}
+                    <li><a class="getstarted scrollto" href="{% url 'user_login' %}">Iniciar sesión</a></li>
+                    {% endif %}
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+
+        </div>
+    </header><!-- End Header -->
+
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="hero d-flex align-items-center">
+
+        <div class="container">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <div class="alert alert-primary" role="alert">{{ message }}</div>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="row">
+                <div class="col-lg-6 d-flex flex-column justify-content-center">
+                    <h1 data-aos="fade-up">Conectando empresas con el mejor talento en línea</h1>
+                    <h2 data-aos="fade-up" data-aos-delay="400">Te brindamos las herramientas y el conocimiento para
+                        alcanzar tus objetivos y hacer crecer tu empresa</h2>
+                    <div data-aos="fade-up" data-aos-delay="600">
+
+                        <div class="d-flex">
+                            {% for category in categories %}
+                            <div style="padding-bottom: 5px; padding-left: 4px;">
+                                <a href="{% url 'category_list' category.pk %}">
+                                    <span class="badge rounded-pill bg-primary">{{ category.name }}</span>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <form action="{% url 'search' %}" method="POST" class="d-flex">
+                            {% csrf_token %}
+                            <input class="form-control me-2" name="search" type="search" placeholder="Buscar"
+                                aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-search" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg></button>
+                        </form>
+
+                        <div class="text-center text-lg-start">
+                            <a href="{% url 'all_posts' %}"
+                                class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
+                                <span>Empezar</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200">
+                    <img src="{% static 'assets/img/hero-img.png' %}" class="img-fluid" alt="">
+                </div>
+            </div>
+        </div>
+
+    </section><!-- End Hero -->
+
+    <main id="main">
+        <!-- ======= About Section ======= -->
+        <section id="about" class="about">
+
+            <div class="container" data-aos="fade-up">
+                <div class="row gx-0">
+
+                    <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up"
+                        data-aos-delay="200">
+                        <div class="content">
+                            <h3>Quienes somos?</h3>
+                            <h2>Somos un equipo de contratistas que nos enorgullecemos de encontrar a los mejores
+                                freelancers para su negocio.</h2>
+                            <p>
+                                Como equipo de contratistas, nuestro enfoque principal es encontrar a los mejores
+                                freelancers para las necesidades de tu negocio. Entendemos que contratar al talento
+                                adecuado puede marcar una gran....</p>
+                            <div class="text-center text-lg-start">
+                                <a href="#"
+                                    class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <span>Leer Mas</span>
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+                        <img src="{% static 'assets/img/about.jpg' %}" class="img-fluid" alt="">
+                    </div>
+
+                </div>
+            </div>
+
+        </section><!-- End About Section -->
+
+        <!-- ======= Values Section ======= -->
+        <section id="values" class="values">
+
+            <div class="container" data-aos="fade-up">
+
+                <header class="section-header">
+                    <h2>Our Values</h2>
+                    <p>Maximizando el éxito empresarial a través de la seguridad financiera, el crecimiento y la
+                        optimización del tiempo</p>
+                </header>
+
+                <div class="row">
+
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="box">
+                            <img src="{% static 'assets/img/values-1.png' %}" class="img-fluid" alt="">
+                            <h3>Seguridad financiera</h3>
+                            <p>Confía en nosotros para proteger tu futuro financiero.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="400">
+                        <div class="box">
+                            <img src="{% static 'assets/img/values-2.png' %}" class="img-fluid" alt="">
+                            <h3>El crecimiento de tu negocio</h3>
+                            <p>Impulsa tu negocio al siguiente nivel.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="600">
+                        <div class="box">
+                            <img src="{% static 'assets/img/values-3.png' %}" class="img-fluid" alt="">
+                            <h3>La optimización.</h3>
+                            <p>Optimiza tu tiempo y alcanza el éxito.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- End Values Section -->
+
+        <!-- ======= Counts Section ======= -->
+        <!-- <section id="counts" class="counts">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-emoji-smile"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Happy Clients</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-journal-richtext" style="color: #ee6c20;"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Projects</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-headset" style="color: #15be56;"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Hours Of Support</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-people" style="color: #bb0852;"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Hard Workers</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section> -->
+        <!-- End Counts Section -->
+
+        <!-- ======= Features Section ======= -->
+        <section id="features" class="features">
+
+            <div class="container" data-aos="fade-up">
+
+                <header class="section-header">
+                    <h2>CARACTERÍSTICAS</h2>
+                    <p>¿Qué tenemos para ofrecer?</p>
+                </header>
+
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <img src="{% static 'assets/img/features.png' %}" class="img-fluid" alt="">
+                    </div>
+
+                    <div class="col-lg-6 mt-5 mt-lg-0 d-flex">
+                        <div class="row align-self-center gy-4">
+
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="200">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>Soporte de servicio al cliente</h3>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="300">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>Conexiones a freelancers</h3>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="400">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>Conexiones a otros negosios</h3>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="500">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>Herramientas de organizacion</h3>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="600">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>Herramientas de apoyo</h3>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6" data-aos="zoom-out" data-aos-delay="700">
+                                <div class="feature-box d-flex align-items-center">
+                                    <i class="bi bi-check"></i>
+                                    <h3>Comunidad</h3>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div> <!-- row -->
+
+                <!-- Feature Tabs -->
+                <div class="row feture-tabs" data-aos="fade-up">
+                    <div class="col-lg-6">
+                        <h3>No somos solo una plataforma somos una red social para autónomos y emprendedores</h3>
+
+                        <!-- Tabs -->
+                        <ul class="nav nav-pills mb-3">
+                            <li>
+                                <a class="nav-link active" data-bs-toggle="pill" href="#tab1">Emprendedores</a>
+                            </li>
+                            <li>
+                                <a class="nav-link" data-bs-toggle="pill" href="#tab2">Freelancer</a>
+                            </li>
+                        </ul><!-- End Tabs -->
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+
+                            <div class="tab-pane fade show active" id="tab1">
+                                <p>Como emprendedor, puedes mostrar tus publicaciones guardadas en tu página de perfil
+                                    de usuario, las cuales serán visibles para la vibrante comunidad de trabajadores
+                                    independientes y otros emprendedores.</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-check2"></i>
+                                    <h4>Queremos comunidad y conexiones</h4>
+                                </div>
+                                <p>Esta plataforma te permite demostrar tu compromiso en la construcción de una red
+                                    sólida y resaltar tu dedicación en mantenerte al tanto de las últimas tendencias e
+                                    ideas en tu industria.</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-check2"></i>
+                                    <h4>Nos esforzamos por la comunidad y las conexiones</h4>
+                                </div>
+                                <p>significa que valoramos la importancia de construir una comunidad sólida y fomentar
+                                    conexiones significativas entre los miembros de la misma.</p>
+                            </div><!-- End Tab 1 Content -->
+
+                            <div class="tab-pane fade show" id="tab2">
+                                <p>Al crear una cuenta de freelancer, tendrás la oportunidad de demostrar tus
+                                    habilidades y experiencia publicando tus servicios en categorías preestablecidas, lo
+                                    que facilitará que potenciales clientes te encuentren y te contraten para sus
+                                    proyectos.</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-check2"></i>
+                                    <h4>¿Estás listo para mostrarle al mundo lo que puedes hacer?</h4>
+                                </div>
+                                <p>Con una cuenta de freelancer, puedes publicar tus servicios en categorías
+                                    preestablecidas, lo que te permite destacar tus habilidades y experiencia. ¡Haz que
+                                    sea más fácil para tus clientes potenciales encontrarte y contratarte para sus
+                                    proyectos.</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-check2"></i>
+                                    <h4>¿Quieres destacar entre la multitud y aumentar tus oportunidades de conseguir
+                                        proyectos?</h4>
+                                </div>
+                                <p>Al crear una cuenta de freelancer, podrás publicar tus servicios en categorías
+                                    específicas y diferenciarte de la competencia. ¡Convierte tus habilidades en
+                                    ingresos y demuestra lo que eres capaz de hacer.</p>
+                            </div><!-- End Tab 2 Content -->
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+                        <img src="{% static 'assets/img/features-2.png' %}" class="img-fluid" alt="">
+                    </div>
+
+                </div><!-- End Feature Tabs -->
+
+                <!-- Feature Icons -->
+                <div class="row feature-icons" data-aos="fade-up">
+                    <h3>Ratione mollitia eos ab laudantium rerum beatae quo</h3>
+
+                    <div class="row">
+
+                        <div class="col-xl-4 text-center" data-aos="fade-right" data-aos-delay="100">
+                            <img src="{% static 'assets/img/features-3.png' %}" class="img-fluid p-4" alt="">
+                        </div>
+
+                        <div class="col-xl-8 d-flex content">
+                            <div class="row align-self-center gy-4">
+
+                                <div class="col-md-6 icon-box" data-aos="fade-up">
+                                    <i class="ri-line-chart-line"></i>
+                                    <div>
+                                        <h4>Corporis voluptates sit</h4>
+                                        <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut
+                                            aliquip</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
+                                    <i class="ri-stack-line"></i>
+                                    <div>
+                                        <h4>Ullamco laboris nisi</h4>
+                                        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                                            deserunt</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
+                                    <i class="ri-brush-4-line"></i>
+                                    <div>
+                                        <h4>Labore consequatur</h4>
+                                        <p>Aut suscipit aut cum nemo deleniti aut omnis. Doloribus ut maiores omnis
+                                            facere</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
+                                    <i class="ri-magic-line"></i>
+                                    <div>
+                                        <h4>Beatae veritatis</h4>
+                                        <p>Expedita veritatis consequuntur nihil tempore laudantium vitae denat pacta
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
+                                    <i class="ri-command-line"></i>
+                                    <div>
+                                        <h4>Molestiae dolor</h4>
+                                        <p>Et fuga et deserunt et enim. Dolorem architecto ratione tensa raptor marte
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
+                                    <i class="ri-radar-line"></i>
+                                    <div>
+                                        <h4>Explicabo consectetur</h4>
+                                        <p>Est autem dicta beatae suscipit. Sint veritatis et sit quasi ab aut inventore
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div><!-- End Feature Icons -->
+
+            </div>
+
+        </section><!-- End Features Section -->
+
+        <!-- ======= Services Section ======= -->
+        <section id="services" class="services">
+
+            <div class="container" data-aos="fade-up">
+
+                <header class="section-header">
+                    <h2>Services</h2>
+                    <p>Veritatis et dolores facere numquam et praesentium</p>
+                </header>
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                        <div class="service-box blue">
+                            <i class="ri-discuss-line icon"></i>
+                            <h3>Nesciunt Mete</h3>
+                            <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores
+                                iure perferendis tempore et consequatur.</p>
+                            <a href="#" class="read-more"><span>Read More</span> <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                        <div class="service-box orange">
+                            <i class="ri-discuss-line icon"></i>
+                            <h3>Eosle Commodi</h3>
+                            <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum
+                                hic non ut nesciunt dolorem.</p>
+                            <a href="#" class="read-more"><span>Read More</span> <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                        <div class="service-box green">
+                            <i class="ri-discuss-line icon"></i>
+                            <h3>Ledo Markt</h3>
+                            <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id
+                                voluptas adipisci eos earum corrupti.</p>
+                            <a href="#" class="read-more"><span>Read More</span> <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                        <div class="service-box red">
+                            <i class="ri-discuss-line icon"></i>
+                            <h3>Asperiores Commodi</h3>
+                            <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga
+                                sit provident adipisci neque.</p>
+                            <a href="#" class="read-more"><span>Read More</span> <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                        <div class="service-box purple">
+                            <i class="ri-discuss-line icon"></i>
+                            <h3>Velit Doloremque.</h3>
+                            <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed
+                                animi at autem alias eius labore.</p>
+                            <a href="#" class="read-more"><span>Read More</span> <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="700">
+                        <div class="service-box pink">
+                            <i class="ri-discuss-line icon"></i>
+                            <h3>Dolori Architecto</h3>
+                            <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure.
+                                Corrupti recusandae ducimus enim.</p>
+                            <a href="#" class="read-more"><span>Read More</span> <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- End Services Section -->
+
+        <!-- ======= F.A.Q Section ======= -->
+        <section id="faq" class="faq">
+
+            <div class="container" data-aos="fade-up">
+
+                <header class="section-header">
+                    <h2>P.F</h2>
+                    <p>Preguntas Frecuentes</p>
+                </header>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- F.A.Q List 1-->
+                        <div class="accordion accordion-flush" id="faqlist1">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-content-1">
+                                        ¿Cuál es nuestros proceso para garantizar la calidad y la precisión en su trabajo?
+                                    </button>
+                                </h2>
+                                <div id="faq-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
+                                    <div class="accordion-body">
+                                        <p>
+                                            En Ensocio, tomamos muy en serio la calidad y la precisión. Para garantizar el más alto nivel de calidad en el trabajo entregado por nuestros freelancers, hemos implementado un riguroso proceso de evaluación para evaluar sus habilidades y experiencia antes de que puedan ofrecer sus servicios en nuestra plataforma. <br>
+                                        </p>
+                                        <p>
+                                            Además, alentamos a nuestros compradores a dejar comentarios y calificaciones sobre los servicios que reciben, lo que nos ayuda a mantener un alto nivel de calidad en toda nuestra plataforma. También tenemos un proceso de resolución de disputas para abordar cualquier problema que pueda surgir entre compradores y vendedores. <br>
+                                        </p>
+                                        <p>
+                                            También ofrecemos un sistema de mensajería que permite a compradores y vendedores comunicarse a lo largo del proyecto para garantizar que el trabajo entregado cumpla con los requisitos del comprador. <br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-content-2">
+                                        ¿Cómo maneja las revisiones y los cambios en el alcance del proyecto?
+                                    </button>
+                                </h2>
+                                <div id="faq-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
+                                    <div class="accordion-body">
+                                        <ol>
+                                            <li>
+                                                <p>
+                                                    En Ensocio, entendemos que a veces los proyectos requieren revisiones y cambios en su alcance. Es por eso que animamos a nuestros compradores y vendedores a comunicarse abierta y frecuentemente durante todo el proyecto para asegurarse de que todos estén en la misma página. Nuestro sistema de mensajería permite una comunicación y colaboración sencillas entre compradores y vendedores. <br>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Recomendamos que nuestros compradores y vendedores discutan el alcance del proyecto y cualquier posible revisión o cambio antes de que comience el proyecto. De esta manera, ambas partes pueden ponerse de acuerdo en un alcance de trabajo claro y minimizar la necesidad de revisiones más adelante. <br>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Si son necesarias revisiones o cambios en el alcance del proyecto, nuestra plataforma permite a los compradores solicitar revisiones y comunicar sus comentarios directamente al vendedor. Los vendedores tienen la oportunidad de revisar su trabajo en base a los comentarios del comprador y presentar la versión actualizada para su revisión. <br>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    También tenemos un centro de resolución para ayudar a abordar cualquier problema que pueda surgir durante un proyecto, incluidos desacuerdos sobre revisiones o cambios en el alcance. Nuestro equipo está disponible para brindar apoyo y orientación tanto a compradores como a vendedores para ayudar a resolver cualquier conflicto y garantizar un resultado positivo para todas las partes involucradas. <br>
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-content-3">
+                                        ¿Pueden trabajar con mis herramientas y tecnologías existentes?
+                                    </button>
+                                </h2>
+                                <div id="faq-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist1">
+                                    <div class="accordion-body">
+                                        <ol>
+                                            <li>
+                                                <p>
+                                                    En Ensocio, entendemos que cada proyecto y cliente es único, por lo que nuestros freelancers están capacitados para trabajar con una amplia gama de herramientas y tecnologías. Nuestra plataforma permite a los compradores especificar las herramientas y tecnologías requeridas para sus proyectos, y nuestros freelancers tienen la flexibilidad de trabajar con esas herramientas.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Nuestros freelancers tienen experiencia en el uso de una variedad de herramientas y tecnologías y son adaptables a nuevas herramientas si es necesario. Si tienes herramientas o tecnologías específicas que prefieres usar, puedes discutir esto con tu freelancer para asegurarte de que se sientan cómodos y familiarizados con esas herramientas.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    También proporcionamos recursos y orientación para ayudar a los compradores y vendedores a colaborar de manera efectiva, independientemente de las herramientas o tecnologías que se estén utilizando. Nuestro sistema de mensajería permite una comunicación y colaboración sencillas entre compradores y vendedores, y contamos con herramientas de gestión de proyectos que pueden ayudar a mantener a todos en el buen camino y garantizar que el proyecto se complete con éxito.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Si tienes alguna preocupación sobre trabajar con tus herramientas y tecnologías existentes, te animamos a discutir esto con tu freelancer antes de que comience el proyecto. De esta manera, puedes asegurarte de que tu freelancer se sienta cómodo y familiarizado con tus herramientas y pueda trabajar de manera efectiva con ellas.
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <!-- F.A.Q List 2-->
+                        <div class="accordion accordion-flush" id="faqlist2">
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq2-content-1">
+                                        ¿Cómo me comunico con un freelancer en Ensocio?
+                                    </button>
+                                </h2>
+                                <div id="faq2-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
+                                    <div class="accordion-body">
+                                        <ol>
+                                            <li>
+                                                <p>
+                                                    Ensocio proporciona un sistema de mensajería fácil de usar que permite a compradores y vendedores comunicarse directamente entre sí. Una vez que hayas realizado un pedido, puedes utilizar el sistema de mensajería para discutir los detalles del proyecto, proporcionar retroalimentación y hacer cualquier pregunta que tengas.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Nuestro sistema de mensajería también admite el intercambio de archivos, por lo que puedes compartir cualquier archivo o documento relevante con tu freelancer directamente a través de la plataforma.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Recomendamos que los compradores y vendedores se comuniquen con frecuencia durante el proyecto para asegurarse de que todos estén en la misma página. Esto puede ayudar a prevenir malentendidos y garantizar que el proyecto se complete con éxito.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Si necesitas tener una discusión más profunda con tu freelancer, puedes programar una llamada o videollamada utilizando el sistema de mensajería o herramientas externas como Skype o Zoom.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Ensocio también tiene una aplicación móvil que te permite comunicarte con tu freelancer sobre la marcha. Puedes descargar la aplicación para iOS o Android y mantenerte conectado con tu freelancer donde sea que estés.
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq2-content-2">
+                                        ¿Cómo puedo pagar por los servicios en Fiverr?
+                                    </button>
+                                </h2>
+                                <div id="faq2-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
+                                    <div class="accordion-body">
+                                        <ol>
+                                            <li>
+                                                <p>
+                                                    Para pagar por un servicio, simplemente agrega el servicio a tu carrito y procede al pago. Se te solicitará que ingreses los detalles de tu pago y confirmes el pago.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Ensocio retiene el pago hasta que se complete el trabajo a la satisfacción del comprador. Una vez aprobado el trabajo, se libera el pago al vendedor.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Ensocio también ofrece una política de protección de pagos que cubre a los compradores en caso de disputas o problemas con un vendedor. Si no estás satisfecho con el trabajo recibido, puedes solicitar un reembolso o disputar el pago.
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq2-content-3">
+                                        ¿Cómo manejan la confidencialidad y la seguridad de los datos?
+                                    </button>
+                                </h2>
+                                <div id="faq2-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist2">
+                                    <div class="accordion-body">
+                                        <ol>
+                                            <li>
+                                                <p>
+                                                    En Ensocio, tomamos la confidencialidad y la seguridad de datos muy en serio. Hemos implementado medidas de seguridad estrictas para proteger los datos de los usuarios, que incluyen encriptación, firewalls y auditorías de seguridad regulares.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Nuestra plataforma también permite a los compradores y vendedores firmar un acuerdo de no divulgación (NDA) para proteger la confidencialidad de su trabajo e información.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    Recomendamos que los compradores y vendedores tomen medidas para proteger sus propios datos e información, incluyendo el uso de contraseñas seguras y no compartir información confidencial a través de redes no seguras.
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- End F.A.Q Section -->
+
+        <!-- ======= Testimonials Section ======= -->
+        <!-- <section id="testimonials" class="testimonials">
+
+      <div class="container" data-aos="fade-up">
+
+        <header class="section-header">
+          <h2>Testimonials</h2>
+          <p>What they are saying about us</p>
+        </header>
+
+        <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="200">
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
+                </p>
+                <div class="profile mt-auto">
+                  <img src="{% static 'assets/img/testimonials/testimonials-1.jpg' %}" class="testimonial-img" alt="">
+                  <h3>Saul Goodman</h3>
+                  <h4>Ceo &amp; Founder</h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
+                </p>
+                <div class="profile mt-auto">
+                  <img src="{% static 'assets/img/testimonials/testimonials-2.jpg' %}" class="testimonial-img" alt="">
+                  <h3>Sara Wilsson</h3>
+                  <h4>Designer</h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
+                </p>
+                <div class="profile mt-auto">
+                  <img src="{% static 'assets/img/testimonials/testimonials-3.jpg' %}" class="testimonial-img" alt="">
+                  <h3>Jena Karlis</h3>
+                  <h4>Store Owner</h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
+                </p>
+                <div class="profile mt-auto">
+                  <img src="{% static 'assets/img/testimonials/testimonials-4.jpg' %}" class="testimonial-img" alt="">
+                  <h3>Matt Brandon</h3>
+                  <h4>Freelancer</h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
+                </p>
+                <div class="profile mt-auto">
+                  <img src="{% static 'assets/img/testimonials/testimonials-5.jpg' %}" class="testimonial-img" alt="">
+                  <h3>John Larson</h3>
+                  <h4>Entrepreneur</h4>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+
+    </section> -->
+
+        <!-- ======= Team Section ======= -->
+        <section id="team" class="team">
+
+            <div class="container" data-aos="fade-up">
+
+                <header class="section-header">
+                    <h2>Team</h2>
+                    <p>Our hard working team</p>
+                </header>
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                        <div class="member">
+                            <div class="member-img">
+                                <img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt="">
+                                <div class="social">
+                                    <a href=""><i class="bi bi-twitter"></i></a>
+                                    <a href=""><i class="bi bi-facebook"></i></a>
+                                    <a href=""><i class="bi bi-instagram"></i></a>
+                                    <a href=""><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <h4>Walter White</h4>
+                                <span>Chief Executive Officer</span>
+                                <p>Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae aut.
+                                    Ipsum exercitationem iure minima enim corporis et voluptate.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+                        <div class="member">
+                            <div class="member-img">
+                                <img src="{% static 'assets/img/team/team-2.jpg' %}" class="img-fluid" alt="">
+                                <div class="social">
+                                    <a href=""><i class="bi bi-twitter"></i></a>
+                                    <a href=""><i class="bi bi-facebook"></i></a>
+                                    <a href=""><i class="bi bi-instagram"></i></a>
+                                    <a href=""><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <h4>Sarah Jhonson</h4>
+                                <span>Product Manager</span>
+                                <p>Quo esse repellendus quia id. Est eum et accusantium pariatur fugit nihil minima
+                                    suscipit corporis. Voluptate sed quas reiciendis animi neque sapiente.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+                        <div class="member">
+                            <div class="member-img">
+                                <img src="{% static 'assets/img/team/team-3.jpg' %}" class="img-fluid" alt="">
+                                <div class="social">
+                                    <a href=""><i class="bi bi-twitter"></i></a>
+                                    <a href=""><i class="bi bi-facebook"></i></a>
+                                    <a href=""><i class="bi bi-instagram"></i></a>
+                                    <a href=""><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <h4>William Anderson</h4>
+                                <span>CTO</span>
+                                <p>Vero omnis enim consequatur. Voluptas consectetur unde qui molestiae deserunt.
+                                    Voluptates enim aut architecto porro aspernatur molestiae modi.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+                        <div class="member">
+                            <div class="member-img">
+                                <img src="{% static 'assets/img/team/team-4.jpg' %}" class="img-fluid" alt="">
+                                <div class="social">
+                                    <a href=""><i class="bi bi-twitter"></i></a>
+                                    <a href=""><i class="bi bi-facebook"></i></a>
+                                    <a href=""><i class="bi bi-instagram"></i></a>
+                                    <a href=""><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                            <div class="member-info">
+                                <h4>Amanda Jepson</h4>
+                                <span>Accountant</span>
+                                <p>Rerum voluptate non adipisci animi distinctio et deserunt amet voluptas. Quia aut
+                                    aliquid doloremque ut possimus ipsum officia.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- End Team Section -->
+
+        <!-- ======= Clients Section ======= -->
+        <!-- <section id="clients" class="clients">
+
+      <div class="container" data-aos="fade-up">
+
+        <header class="section-header">
+          <h2>Our Clients</h2>
+          <p>Temporibus omnis officia</p>
+        </header>
+
+        <div class="clients-slider swiper">
+          <div class="swiper-wrapper align-items-center">
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-1.png' %}" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-2.png' %}" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-3.png' %}" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-4.png' %}" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-5.png' %}" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-6.png' %}" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-7.png' %}" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="{% static 'assets/img/clients/client-8.png' %}" class="img-fluid" alt=""></div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+
+    </section> End Clients Section -->
+
+        <!-- ======= Recent Blog Posts Section ======= -->
+        <section id="recent-blog-posts" class="recent-blog-posts">
+
+            <div class="container" data-aos="fade-up">
+
+                <header class="section-header">
+                    <h2>Blog</h2>
+                    <p>Recent posts form our Blog</p>
+                </header>
+
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        <div class="post-box">
+                            <div class="post-img"><img src="{% static 'assets/img/blog/blog-1.jpg' %}" class="img-fluid"
+                                    alt=""></div>
+                            <span class="post-date">Tue, September 15</span>
+                            <h3 class="post-title">Eum ad dolor et. Autem aut fugiat debitis voluptatem consequuntur sit
+                            </h3>
+                            <a href="blog-single.html" class="readmore stretched-link mt-auto"><span>Read More</span><i
+                                    class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="post-box">
+                            <div class="post-img"><img src="{% static 'assets/img/blog/blog-2.jpg' %}" class="img-fluid"
+                                    alt=""></div>
+                            <span class="post-date">Fri, August 28</span>
+                            <h3 class="post-title">Et repellendus molestiae qui est sed omnis voluptates magnam</h3>
+                            <a href="blog-single.html" class="readmore stretched-link mt-auto"><span>Read More</span><i
+                                    class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="post-box">
+                            <div class="post-img"><img src="{% static 'assets/img/blog/blog-3.jpg' %}" class="img-fluid"
+                                    alt=""></div>
+                            <span class="post-date">Mon, July 11</span>
+                            <h3 class="post-title">Quia assumenda est et veritatis aut quae</h3>
+                            <a href="blog-single.html" class="readmore stretched-link mt-auto"><span>Read More</span><i
+                                    class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- End Recent Blog Posts Section -->
+
+        <!-- ======= Contact Section ======= -->
+        <section id="contact" class="contact">
+
+            <div class="container" data-aos="fade-up">
+
+                <header class="section-header">
+                    <h2>Contacto</h2>
+                    <p>Contacta nosotros</p>
+                </header>
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-6">
+
+                        <div class="row gy-4">
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <h3>DIRECCIÓN</h3>
+                                    <p>A108 Adam Street,<br>New York, NY 535022</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <i class="bi bi-telephone"></i>
+                                    <h3>Call Us</h3>
+                                    <p>+1 5589 55488 55<br>+1 6678 254445 41</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <i class="bi bi-envelope"></i>
+                                    <h3>Correo Electrónico</h3>
+                                    <p>info@example.com<br>contact@example.com</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box">
+                                    <i class="bi bi-clock"></i>
+                                    <h3>Horarios de apertura</h3>
+                                    <p>Lunes - Viernes<br>9:00AM - 05:00PM</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+                        <form method="POST">
+                            <div class="row gy-4">
+                                {% csrf_token %}
+
+                                <div class="col-md-6">
+                                    <input type="name" name="name" class="form-control" placeholder="Your Name"
+                                        required>
+                                </div>
+
+                                <div class="col-md-6 ">
+                                    <input type="email" class="form-control" name="email" placeholder="Your Email"
+                                        required>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <input type="subject" class="form-control" name="subject" placeholder="Subject"
+                                        required>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <textarea class="form-control" name="message" rows="6" placeholder="Message"
+                                        required></textarea>
+                                </div>
+
+                                <div class="col-md-12 text-center">
+                                    <input class="btn btn-primary" type="submit" value="Send Message"></input>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- End Contact Section -->
+
+    </main><!-- End #main -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">QUIENES SOMOS?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Como equipo de contratistas, nuestro enfoque principal es encontrar a los mejores freelancers para
+                    las necesidades de tu negocio. Entendemos que contratar al talento adecuado puede marcar una gran
+                    diferencia en el éxito de tu empresa, y es por eso que nos enorgullecemos de nuestra capacidad para
+                    identificar y reclutar a los freelancers de primer nivel en una variedad de industrias y
+                    habilidades.
+                    <hr>
+                    Nuestro equipo de contratistas experimentados ha desarrollado un ojo agudo para identificar a los
+                    mejores talentos, y utilizamos una variedad de herramientas y estrategias para asegurarnos de que
+                    estamos conectando a tu negocio con los freelancers más calificados disponibles. Ya sea que estés
+                    buscando un diseñador gráfico, desarrollador web, escritor de contenido o cualquier otro tipo de
+                    freelancer, tenemos los recursos y la experiencia para ayudarte a encontrar el ajuste perfecto para
+                    tu negocio.
+                    <hr>
+                    Al final del día, nuestro objetivo es ayudarte a construir un equipo sólido y capaz de freelancers
+                    que puedan ayudar a llevar tu negocio al siguiente nivel. Con nuestro dedicado equipo de
+                    contratistas trabajando incansablemente para identificar y reclutar a los mejores talentos, puedes
+                    estar seguro de que estás en buenas manos con nuestros servicios. Además, es importante mencionar
+                    que solo contratamos a freelancers mexicanos para poder contribuir al desarrollo económico y social
+                    de nuestro país.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row gy-4">
+                    <div class="col-lg-5 col-md-12 footer-info">
+                        <a href="index.html" class="logo d-flex align-items-center">
+                            <img src="assets/img/logo.png" alt="">
+                            <span>Ensocio.mx</span>
+                        </a>
+                        <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita
+                            valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+                        <div class="social-links mt-3">
+                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-6 footer-links">
+                        <h4>Useful Links</h4>
+                        <ul>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Home</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">About us</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Services</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Terms of service</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Privacy policy</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-2 col-6 footer-links">
+                        <h4>Our Services</h4>
+                        <ul>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Design</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Development</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Product Management</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
+                            <li><i class="bi bi-chevron-right"></i> <a href="#">Graphic Design</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                        <h4>Contact Us</h4>
+                        <p>
+                            A108 Adam Street <br>
+                            New York, NY 535022<br>
+                            United States <br><br>
+                            <strong>Phone:</strong> +1 5589 55488 55<br>
+                            <strong>Email:</strong> info@example.com<br>
+                        </p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong><span>FlexStart</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/flexstart-bootstrap-startup-template/ -->
+                Designed by <a href="https://bootstrapmade.com/">Ensocio.mx</a>
+            </div>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+    <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
+</html>

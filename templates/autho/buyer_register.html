@@ -1,0 +1,93 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<!-- Section: Design Block -->
+<br>
+<section class="">
+  <!-- Jumbotron -->
+  <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
+    <div class="container">
+      <div class="row gx-lg-5 align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h1 class="my-5 display-3 fw-bold ls-tight">
+            La mejor oferta <br />
+            <span class="text-primary">para tu negocio</span>
+          </h1>
+          <p style="color: hsl(217, 10%, 50.8%)">
+            Obtenga el mejor valor para su negocio con nuestros servicios de primer nivel y
+            precios competitivos. Elíjanos para una buena inversión en su negocio.
+          </p>
+        </div>
+
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <div class="card">
+            <div class="card-body py-5 px-md-5">
+              <form method="POST">
+                {% if messages %}
+                  <ul class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-primary" role="alert">{{ message }}</div>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+                {% if form.errors %}
+                  <div class="alert alert-danger">
+                    <ul>
+                    {% for field in form %}
+                      {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>
+                      {% endfor %}
+                    {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+                {% csrf_token %}
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      {{ form.first_name }}
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      {{ form.last_name }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Username input -->
+                <div class="form-outline mb-4">
+                  {{ form.username }}
+                </div>
+
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                  {{ form.email }}
+                </div>
+
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                  {{ form.password1 }}
+
+                </div>
+
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                  {{ form.password2 }}
+                </div>
+
+                <!-- Submit button -->
+                <input value="Registrarse" type="submit" class="btn btn-primary btn-block mb-4 form-control">
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+</section>
+<!-- Section: Design Block -->
+{% endblock %}

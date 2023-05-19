@@ -1,0 +1,513 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<style>
+    h3 {
+        font-size: 18px;
+        font-weight: 500;
+        color: #33363b;
+    }
+
+    p {
+        font-size: 14px;
+        color: #868d9b;
+    }
+
+    .cardz {
+        width: 400px;
+        height: auto;
+        background-color: #ffffff;
+        margin: 0 auto;
+        margin-top: 0px;
+        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.15);
+    }
+
+    .card_profile_img {
+        width: 120px;
+        height: 120px;
+        background-color: #868d9b;
+        background: url("{{ user.profile.user_image.url }}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid #ffffff;
+        border-radius: 120px;
+        margin: 0 auto;
+        margin-top: -60px;
+    }
+
+    .card_background_img {
+        width: 100%;
+        height: 200px;
+        background-color: #e1e7ed;
+        background: url("https://source.unsplash.com/9wg5jCEPBsw");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .user_details p {
+        margin-bottom: 20px;
+        margin-top: -5px;
+    }
+
+    .user_details h3 {
+        margin-top: 10px;
+    }
+
+    .card_count {
+        padding: 30px;
+        border-top: 1px solid #dde1e7;
+    }
+
+    .count {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 28px;
+    }
+
+    .count p {
+        margin-top: -10px;
+    }
+
+    .btn {
+        padding: 10px;
+        width: 100%;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        background-color: #24c5a1;
+        color: #ffffff;
+        cursor: pointer;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+</style>
+<main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Perfil</h2>
+                <ol>
+                    <li><a href="/">Inicio</a></li>
+                    <li>Perfil</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- End Breadcrumbs -->
+    <!-- ======= Portfolio Details Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container" data-aos="fade-up">
+            <div class="row gy-4">
+                <div class="col-lg-8">
+                    <div class="portfolio-details-slider swiper">
+                        {% if request.user.account.freelancer_key %}
+                            <nav class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Publicaciones</a>
+                                <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Favorito</a>
+                                <a class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" href="#nav-disabled" role="tab" aria-controls="nav-disabled" tabindex="-1">Commentarios</a>
+                            </nav>
+                              <div class="tab-content" id="nav-tabContent">
+                                <br>
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    {% for post in posts %}
+                                    <div class="card mb-3">
+                                        <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <center>
+                                                <img style="width: 60%; height: auto;" src="{{ post.image.url }}" class="img-fluid rounded-start" alt="servicio">
+                                            </center>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <a href="{% url 'post_detail' post.pk %}">
+                                                    <div class="d-flex" style="justify-content: space-between">
+                                                        <h5 class="card-title">{{ post.title }}</h5>
+                                                        <a href="{% url 'category_list' post.category.pk %}">
+                                                            <p><span class="badge bg-warning text-dark">{{ post.category }}</span></p>
+                                                        </a>
+                                                    </div>
+                                                    <p class="card-text">{{ post.content|slice:'200' }}</p>
+                                                    <div class="d-flex" style="justify-content: space-between">
+                                                        <p class="card-text"><small class="text-muted">{{ post.created_at }}</small></p>
+                                                        <p class="card-text" style="color: green;"><small>${{ post.get_display_price }}</small></p>  
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                        <center>
+                                            <img style="width: 180px; height: auto;" class="img-fluid" src="{% static 'assets/img/sad.png' %}" alt="" srcset="">
+                                            <br><br>
+                                            <p>Aún no hay publicaciones.</p>
+                                        </center>
+                                    {% endfor %}
+                                    página {{ posts.number }} / {{ posts.paginator.num_pages }}
+                                    <!-- Pagination-->
+                                    <nav aria-label="Pagination">
+                                        <hr class="my-0" />
+                                        <ul class="pagination justify-content-center my-4">
+                                            <!--<li class="page-item"><a class="page-link" href="?page=1">&laquo first</a></li>-->
+                                            {% if posts.has_previous %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}"><<</a></li>
+                                            {% endif %}
+                                    
+                                            {% for num_page in posts.paginator.page_range %}
+                                                {% if posts.number == num_page %}
+                                                    <li class="page-item active"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                                {% else %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                    
+                                            {% if posts.has_next %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">>></a></li>
+                                            {% endif %}
+                                        </ul>
+                                        <br>
+                                    </nav>
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                    {% for item in cart_items %}
+                                        <div class="card mb-3">
+                                            <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <center>
+                                                    <img style="width: 60%; height: auto;" src="{{ item.image.url }}" class="img-fluid rounded-start" alt="servicio">
+                                                </center>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <a href="{% url 'post_detail' item.pk %}">
+                                                        <div class="d-flex" style="justify-content: space-between">
+                                                            <h5 class="card-title">{{ item.title }}</h5>
+                                                            <a href="{% url 'category_list' item.category.pk %}">
+                                                                <p><span class="badge bg-warning text-dark">{{ item.category }}</span></p>
+                                                            </a>
+                                                        </div>
+                                                        <p class="card-text">{{ item.content|slice:'200' }}</p>
+                                                        <div class="d-flex" style="justify-content: space-between">
+                                                            <p class="card-text"><small class="text-muted">{{ item.created_at }}</small></p>
+                                                            <p class="card-text" style="color: green;"><small>${{ item.get_display_price }}</small></p>  
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                        <center>
+                                            <img style="width: 180px; height: auto;" class="img-fluid" src="{% static 'assets/img/sad.png' %}" alt="" srcset="">
+                                            <br><br>
+                                            <p>Aún no hay commentarios.</p>
+                                        </center>
+                                    {% endfor %}
+                                    página {{ cart_items.number }} / {{ cart_items.paginator.num_pages }}
+                                    <!-- Pagination-->
+                                    <nav aria-label="Pagination">
+                                        <hr class="my-0" />
+                                        <ul class="pagination justify-content-center my-4">
+                                            <!--<li class="page-item"><a class="page-link" href="?page=1">&laquo first</a></li>-->
+                                            {% if cart_items.has_previous %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ cart_items.previous_page_number }}"><<</a></li>
+                                            {% endif %}
+                                    
+                                            {% for num_page in cart_items.paginator.page_range %}
+                                                {% if cart_items.number == num_page %}
+                                                    <li class="page-item active"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                                {% else %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                    
+                                            {% if cart_items.has_next %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ cart_items.next_page_number }}">>></a></li>
+                                            {% endif %}
+                                        </ul>
+                                        <br>
+                                    </nav>
+                                </div>
+                                <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab">
+                                    {% for x in comments %}
+                                        <br>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <a href="{% url 'post_detail' x.product.pk %}">
+                                                    <div class="d-flex">
+                                                        <img style="width: 15%; height: auto;" src="{{ x.product.image.url }}" alt="" srcset="">
+                                                        
+                                                        <div style="padding-left: 10%; padding-left: 12px;">
+                                                            <h5>{{ x.product.title }}</h5>
+                                                            <div class="d-flex">
+                                                                <h6 style="padding-right: 4px;">@{{ x.author }}:</h6>
+                                                                <h6 style="color: gray;"><b>{{ x.text }}</b></h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                        <center>
+                                            <img style="width: 180px; height: auto;" class="img-fluid" src="{% static 'assets/img/sad.png' %}" alt="" srcset="">
+                                            <br><br>
+                                            <p>Aún no hay commentarios.</p>
+                                        </center>
+                                    {% endfor %}
+
+                                    página {{ comments.number }} / {{ comments.paginator.num_pages }}
+                                    <!-- Pagination-->
+                                    <nav aria-label="Pagination">
+                                        <hr class="my-0" />
+                                        <ul class="pagination justify-content-center my-4">
+                                            <!--<li class="page-item"><a class="page-link" href="?page=1">&laquo first</a></li>-->
+                                            {% if comments.has_previous %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ comments.previous_page_number }}"><<</a></li>
+                                            {% endif %}
+                                    
+                                            {% for num_page in comments.paginator.page_range %}
+                                                {% if comments.number == num_page %}
+                                                    <li class="page-item active"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                                {% else %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                    
+                                            {% if comments.has_next %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ comments.next_page_number }}">>></a></li>
+                                            {% endif %}
+                                        </ul>
+                                        <br>
+                                    </nav>
+
+                                </div>
+                            </div>
+                        {% else %}
+                        <nav class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Favorito</a>
+                            <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Commentarios</a>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br>
+                                {% for item in cart_items %}
+                                    <div class="card mb-3">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <center>
+                                                    <img style="width: 60%; height: auto;" src="{{ item.image.url }}" class="img-fluid rounded-start" alt="servicio">
+                                                </center>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <a href="{% url 'post_detail' item.pk %}">
+                                                        <div class="d-flex" style="justify-content: space-between">
+                                                            <h5 class="card-title">{{ item.title }}</h5>
+                                                            <a href="{% url 'category_list' item.category.pk %}">
+                                                                <p><span class="badge bg-warning text-dark">{{ item.category }}</span></p>
+                                                            </a>
+                                                        </div>
+                                                        <p class="card-text">{{ item.content|slice:'200' }}</p>
+                                                        <div class="d-flex" style="justify-content: space-between">
+                                                            <p class="card-text"><small class="text-muted">{{ item.created_at }}</small></p>
+                                                            <p class="card-text" style="color: green;"><small>${{ item.get_display_price }}</small></p>  
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <center>
+                                        <img style="width: 180px; height: auto;" class="img-fluid" src="{% static 'assets/img/sad.png' %}" alt="" srcset="">
+                                        <br><br>
+                                        <p>Aún no hay favorito.</p>
+                                    </center>
+                                {% endfor %}
+                                página {{ cart_items.number }} / {{ cart_items.paginator.num_pages }}
+                                <!-- Pagination-->
+                                <nav aria-label="Pagination">
+                                    <hr class="my-0" />
+                                    <ul class="pagination justify-content-center my-4">
+                                        <!--<li class="page-item"><a class="page-link" href="?page=1">&laquo first</a></li>-->
+                                        {% if cart_items.has_previous %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ cart_items.previous_page_number }}"><<</a></li>
+                                        {% endif %}
+                                
+                                        {% for num_page in cart_items.paginator.page_range %}
+                                            {% if cart_items.number == num_page %}
+                                                <li class="page-item active"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                            {% else %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                
+                                        {% if cart_items.has_next %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ cart_items.next_page_number }}">>></a></li>
+                                        {% endif %}
+                                    </ul>
+                                    <br>
+                                </nav>
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <br>
+                                {% for comment in comments_reply_post %}
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <a href="{% url 'post_detail' comment.product.pk %}">
+                                                <div class="d-flex">
+                                                    <img style="width: 15%; height: auto;" src="{{ comment.product.image.url }}" alt="" srcset="">
+                                                    
+                                                    <div style="padding-left: 10%; padding-left: 12px;">
+                                                        <h5>{{ comment.product.title }}</h5>
+                                                        <div class="d-flex">
+                                                            <h6 style="padding-right: 4px;">@{{ comment.author }}:</h6>
+                                                            <h6 style="color: gray;"><b>{{ comment.text }}</b></h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <center>
+                                        <img style="width: 180px; height: auto;" class="img-fluid" src="{% static 'assets/img/sad.png' %}" alt="" srcset="">
+                                        <br><br>
+                                        <p>Aún no hay commentarios.</p>
+                                    </center>
+                                {% endfor %}
+                                página {{ comments_reply_post.number }} / {{ comments_reply_post.paginator.num_pages }}
+                                <!-- Pagination-->
+                                <nav aria-label="Pagination">
+                                    <hr class="my-0" />
+                                    <ul class="pagination justify-content-center my-4">
+                                        <!--<li class="page-item"><a class="page-link" href="?page=1">&laquo first</a></li>-->
+                                        {% if comments_reply_post.has_previous %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ comments_reply_post.previous_page_number }}"><<</a></li>
+                                        {% endif %}
+                                
+                                        {% for num_page in comments_reply_post.paginator.page_range %}
+                                            {% if comments_reply_post.number == num_page %}
+                                                <li class="page-item active"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                            {% else %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                
+                                        {% if comments_reply_post.has_next %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ comments_reply_post.next_page_number }}">>></a></li>
+                                        {% endif %}
+                                    </ul>
+                                    <br>
+                                </nav>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cardz">
+                        <div class="card_background_img"></div>
+                        <div class="card_profile_img"></div>
+                        <div class="user_details">
+                            <center>
+                                <a href="{% url 'profile' %}">
+                                    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                                    <p>@{{ user.username }}</p>
+                                </a>
+                                {% if request.user.account.freelancer_key %}
+                                    <small style="padding-right: 12px;">key: {{ user.account.freelancer_key }}</small>
+                                {% else %}
+                                {% endif %}
+                            </center>
+                        </div>
+                        <div class="card_count">
+                            {% if request.user.account.freelancer_key %}
+                            <div class="count">
+                                <div class="fans">
+                                    <center>
+                                        <svg style="color: green;"" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16">
+                                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                        </svg>
+                                        <p>online</p>
+                                    </center>
+                                </div>
+                                <div class="following">
+                                    <center>
+                                        <h6>{{ request.user.date_joined|naturaltime }}</h6>
+                                        <p>unido</p>
+                                    </center>
+                                </div>
+                                <div class="post">
+                                    <center>
+                                        <h3>{{ post_count }}</h3>
+                                        <p>Servicios</p>
+                                    </center>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <p>{{ user.profile.bio }}</p>
+                            {% if request.user.account.freelancer_key %}
+                                <a href="{% url 'create_post' %}">
+                                    <div class="btn btn-success">Publicar</div>
+                                </a>
+                            {% else %}
+                            {% endif %}
+                            <hr>
+                            <div class="d-flex">
+                                <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    Actualizar
+                                </button>
+                                <a href="{% url 'inbox' %}" type="button" class="btn btn-primary form-control">
+                                    <i class="bi bi-inbox"></i> Inbox
+                                </a>
+                            </div>
+                            {% if user.is_authenticated and user.is_staff %}
+                                <a href="{% url 'admin_only' %}" class="btn btn-primary">Admin Only Page</a>
+                            {% endif %}
+
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Portfolio Details Section -->
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Actualizar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ u_form.as_p }}
+                {{ p_form.as_p }}
+                <a class="btn btn-primary" href="{% url 'password_change' %}">Cambiar la Contraseña</a>
+                <hr>
+                <center>
+                    <img style="width: 56%; height: auto;" src="{{ user.profile.user_image.url }}" alt="" srcset="">
+                </center>
+                <hr>
+                <input type="submit" class="btn btn-primary form-control" value="Actualizar">
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerca</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main><!-- End #main -->
+
+{% endblock %}

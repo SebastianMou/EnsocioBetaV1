@@ -1,0 +1,30 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<section id="hero" class="hero d-flex align-items-center">
+
+    <div class="container">
+        <h1>Eliminar cuenta</h1>
+        <p>¿Está seguro de que desea eliminar su cuenta?</p>
+        <p>
+            Antes de eliminar su cuenta, tenga en cuenta que esto resultará en la eliminación permanente de todos sus datos de nuestra plataforma. Esto incluye todos los comentarios, publicaciones, mensajes privados, me gusta y no me gusta que haya realizado, así como cualquier información personal que haya proporcionado durante el registro, como su correo electrónico, número de teléfono y otros detalles relevantes.
+        </p>
+        <p>
+            Es importante tener en cuenta que la eliminación de su cuenta y datos es irreversible, y una vez que se complete el proceso, no habrá forma de recuperar la información eliminada. Además, tenga en cuenta que la eliminación de su cuenta resultará en la terminación de cualquier transacción o servicio en curso que pueda haber tenido con otros usuarios en nuestra plataforma.
+        </p>
+        <p>
+            Entendemos que la eliminación de su cuenta puede ser una decisión necesaria para usted, pero le recomendamos que considere cuidadosamente todas las implicaciones antes de continuar. Si tiene alguna inquietud o pregunta sobre la eliminación de su cuenta o el proceso de eliminación, no dude en ponerse en contacto con nuestro equipo de atención al cliente, que estará encantado de ayudarlo en todo lo posible.
+        </p>
+        <p>
+            Gracias por elegir nuestra plataforma como su proveedor de servicios de confianza, y le deseamos todo lo mejor en sus futuros proyectos.
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.password.label_tag }} {{ form.password }}
+            </div>
+            <button type="submit" class="btn btn-danger">Sí, eliminar mi cuenta</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

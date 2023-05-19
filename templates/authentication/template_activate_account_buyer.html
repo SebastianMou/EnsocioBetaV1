@@ -1,0 +1,7 @@
+{% autoescape off %}
+¡Hola {{ user.username }}! Bienvenido a Ensocio.
+
+Por favor, haz clic en el enlace de abajo para confirmar tu registro:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}

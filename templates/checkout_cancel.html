@@ -1,0 +1,10 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content %}
+<section id="hero" class="hero d-flex align-items-center">
+  <div class="container">
+    <h4>¿Olvidaste agregar algo a tu carrito? ¡Mira alrededor y luego regresa para pagar!</h4>
+    <a class="btn btn-primary" href="{% url 'all_posts' %}">Mas productos</a>
+  </div>
+</section>
+{% endblock %}

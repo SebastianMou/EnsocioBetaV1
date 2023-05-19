@@ -1,0 +1,13 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block content %}
+<section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <input class="btn btn-primary" type="submit" value="entregar">
+        </form>
+    </div>
+</section>
+{% endblock %}

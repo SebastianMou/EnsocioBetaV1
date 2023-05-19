@@ -1,0 +1,59 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .divider:after,
+    .divider:before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #eee;
+    }
+
+    .h-custom {
+        height: calc(100% - 73px);
+    }
+
+    @media (max-width: 450px) {
+        .h-custom {
+            height: 100%;
+        }
+    }
+</style>
+<section class="vh-100">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                    class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <h4>Registro de Freelancer</h4>
+                <form method="POST">
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <div class="alert alert-primary" role="alert">{{ message }}</div>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {{ field.label }}: {{ error }}
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input value="Registrarse" type="submit" class="btn btn-primary form-control"></input>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

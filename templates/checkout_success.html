@@ -1,0 +1,10 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content %}
+  <section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+      <h4>¡Gracias por su compra! Hemos recibido su pedido y lo estamos procesando. Los detalles de su pedido y el recibo serán enviados a la dirección de correo electrónico que proporcionó. Agradecemos su preferencia y esperamos que disfrute su compra.</h4>
+      <a class="btn btn-primary" href="{% url 'all_posts' %}">Mas productos</a>
+    </div>
+  </section>
+{% endblock %}

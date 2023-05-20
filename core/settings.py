@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(a9z578))zh=9e=a=(t5-u!+7v6ej5%1p!ks*h9gojr88jzv7l'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -359,14 +359,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ensocio.mx@gmail.com'
-EMAIL_HOST_PASSWORD = 'qtgtupjwhcfiomsl'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 14400
 
 # Stripe
-STRIPE_PUBLIC_KEY = 'pk_test_51KFusbLG3Rch548FNN0pm6eb2DVaGQvu3ypt2qUDWWPffCL1uZTMve5K754QBrUAbXOqD9IFKkoRkWHceVim2gQA00g8w1xajs'
-STRIPE_SECRET_KEY = 'sk_test_51KFusbLG3Rch548FxCBuH88bWsA2kB3OE261rbEtI0FtiHVrGtZCkMAjkjfJwkqlsCzWfQNxDSQmBzEfawCR6bgg00aWEfvbXH'
+STRIPE_PUBLIC_KEY = ''
+STRIPE_SECRET_KEY = ''
 STRIPE_WEBHOOK_SECRET = ''

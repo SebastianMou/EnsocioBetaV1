@@ -19,12 +19,13 @@
 <main id="main">
     <section id="about" class="about vh-100">
         <div class="container py-5 h-100">
-            <div class="row d-flex align-items-center justify-content-center h-100">
+            <div style="background-color: rgb(153, 151, 151);"  class="row d-flex align-items-center justify-content-center h-100">
                 <div class="col-md-8 col-lg-7 col-xl-6">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                    <img src="{% static 'assets/img/Startup_Monochromatic.png' %}"
                         class="img-fluid" alt="Phone image">
                 </div>
                 <div id="out-form" class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                    
                     <form method="POST">
                         {% if messages %}
                         <ul class="messages">
@@ -49,7 +50,7 @@
                         {% csrf_token %}
                         <!-- Username input -->
                         <div class="form-outline mb-4">
-                            <input name="username" type="username" id="form1Example13" class="form-control form-control-lg" placeholder="Nombre de usuario" />
+                            <input name="email" type="email" id="form1Example13" class="form-control form-control-lg" placeholder="Nombre de usuario" />
                         </div>
 
                         <!-- Password input -->
@@ -57,7 +58,7 @@
                             <input name="password" type="password" id="form1Example23" class="form-control form-control-lg" placeholder="Contraseña" />
                         </div>
 
-                        <small>entra con <a href="{% url 'email_login' %}">Correo Electronico</a></small>
+                        <small>entra con <a href="{% url 'user_login' %}">Nombre de Usuario</a></small>
 
                         <div class="d-flex justify-content-around align-items-center mb-4">
                             <a href="{% url 'password_reset' %}">olvidado tu contraseña?</a>
@@ -79,5 +80,4 @@
         </div>
     </section>
 </main>
-
 {% endblock %}

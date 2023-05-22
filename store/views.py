@@ -137,6 +137,29 @@ def user_login(request):
         pass
     return render(request, 'autho/user_login.html')
 
+def email_login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+
+        # Try to get a user with the provided email
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, 'Email not found')
+            return redirect('email_login')
+
+        # Authenticate the user
+        user = authenticate(request, username=user.username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('profile')
+        else:
+            messages.error(request, 'Invalid password')
+            return redirect('email_login')
+
+    return render(request, 'autho/email_login.html')
+
 @login_required
 def delete_account(request):
     if request.method == 'POST':

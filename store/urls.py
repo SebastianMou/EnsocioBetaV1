@@ -20,7 +20,9 @@ urlpatterns = [
     path('send_message_ajax/', views.send_message_ajax, name='send_message_ajax'),
     path('get_messages_ajax/<str:username>/', views.get_messages_ajax, name='get_messages_ajax'),
     path('delete_conversation_ajax/<str:username>/', views.delete_conversation, name='delete_conversation'),
-    
+    path('create_offer/<str:username>/', views.create_offer, name='create_offer'),
+    path('display_offer/<int:pk>/', views.display_offer, name='display_offer'),
+
     # Controlling post
     path('create_post/', views.create_post, name='create_post'),
     path('all_posts/', views.all_posts, name='all_posts'),

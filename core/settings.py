@@ -32,11 +32,9 @@ ALLOWED_HOSTS = ['*']
 #     '127.0.0.1',
 #     '723e-189-215-210-202.ngrok-free.app',
 # ]
-
 # CSRF_TRUSTED_ORIGINS = [
 #     'https://723e-189-215-210-202.ngrok-free.app', # Replace this with your actual ngrok domain, e.g., '626f-189-215-210-202.ngrok-free.app'
 # ]
-
 # APPEND_SLASH = False
 
 # Application definition

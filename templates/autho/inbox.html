@@ -147,13 +147,26 @@
                     <div class="send-box">
                         <form role="form" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
+                            {% if user.account.freelancer_key %}
+                            <select id="select_offer" name="offer">
+                                <option value="">Select offer</option>
+                                {% for offer in user_offers %}
+                                    <option value="{{ offer.id }}">{{ offer.title }}</option>
+                                {% endfor %}
+                            </select>  
+                            {% endif %}                       
+                            
                             <input type="hidden" name="to_user" id="" value="{{ active_direct }}">
-                            <input name="body" type="text" id="" value="" class="form-control"
-                                placeholder="typ message">
+                            <input name="body" type="text" id="" value="" class="form-control" placeholder="typ message">
 
                             <input type="file" name="file" id="file" style="display:none;" />
                             <label class="btn btn-warning btn-sm" for="file" class="file-label">
                                 <i class="fa fa-paperclip" aria-hidden="true"></i>
+                            </label>
+
+                            <input type="file" name="message_image" id="image" style="display:none;" />
+                            <label class="btn btn-warning btn-sm" for="image">
+                                <i class="bi bi-card-image" aria-hidden="true"></i>
                             </label>
 
                             <button type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i>Send</button>
@@ -161,10 +174,32 @@
                         <div class="d-flex">
                             <i id="file-icon" class="bi bi-file-earmark-arrow-down" style="display: none;"></i>
                             <span id="file-name" class="ms-2"></span>
-                            <button id="unselect-file" type="button" class="btn btn-danger btn-sm ms-2"
-                                style="display: none;"><i class="bi bi-x-circle"></i></button>
+                            <button id="unselect-file" type="button" class="btn btn-danger btn-sm ms-2" style="display: none;">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </div>
+                        <div class="d-flex">
+                            <i id="image-icon" class="bi bi-file-image" style="display: none;"></i>
+                            <span id="image-name" class="ms-2"></span>
+                            <button id="unselect-image" type="button" class="btn btn-danger btn-sm ms-2" style="display: none;">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Button trigger modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: red;"></button> <!-- Change red to the color you want -->
+                </div>
+                <div class="modal-body" id="modal-body"> <!-- Add id="modal-body" here -->
+                <!-- The image will be inserted here -->
                 </div>
             </div>
         </div>
@@ -177,13 +212,23 @@
             const toUser = document.querySelector('input[name="to_user"]').value;
             const body = document.querySelector('input[name="body"]').value;
             const fileInput = document.querySelector('input[type="file"]');
+            const imageInput = document.querySelector('input[id="image"]');
+            const offerSelect = document.querySelector('#select_offer'); // fetch the select element
             const formData = new FormData();
 
             formData.append('to_user', toUser);
             formData.append('body', body);
 
+            if (offerSelect.value) {
+                formData.append('offer', offerSelect.value);
+            }
+
             if (fileInput.files.length > 0) {
                 formData.append('file', fileInput.files[0]);
+            }
+
+            if (imageInput.files.length > 0) {
+                formData.append('message_image', imageInput.files[0]);
             }
 
             fetch('/send_message_ajax/', {
@@ -198,14 +243,24 @@
                     if (data.status === 'success') {
                         document.querySelector('input[name="body"]').value = '';
                         fileInput.value = ''; // Add this line to clear the file input
+                        imageInput.value = ''; 
 
-                        // Clear the file name, hide the file icon, and hide the "Unselect" button
+                        // Clear the file name, hide the file icon, and hide the "Unselect" button when sent
                         const fileNameElement = document.getElementById('file-name');
                         const fileIconElement = document.getElementById('file-icon');
                         const unselectFileButton = document.getElementById('unselect-file');
                         fileNameElement.textContent = '';
                         fileIconElement.style.display = 'none';
                         unselectFileButton.style.display = 'none';
+
+                        // Clear the image name, hide the image icon, and hide the "Unselect Image" button when sent
+                        const imageNameElement = document.getElementById('image-name');
+                        const imageIconElement = document.getElementById('image-icon');
+                        const unselectImageButton = document.getElementById('unselect-image');
+                        imageNameElement.textContent = '';
+                        imageIconElement.style.display = 'none';
+                        unselectImageButton.style.display = 'none';
+
 
                         getMessages(toUser).then(() => {
                             scrollToBottom();
@@ -267,6 +322,62 @@
                             listItem.appendChild(card);
                         }
 
+                        if (message.message_image_url) {
+                            const img = document.createElement('img');
+                            img.src = message.message_image_url;
+                            img.alt = "Message Image";
+                            img.style.width = '350px'; // Add this to limit the width of the image
+                            img.style.height = 'auto'; // Add this to limit the height of the image
+                            img.setAttribute('data-bs-toggle', 'modal');
+                            img.setAttribute('data-bs-target', '#exampleModal');
+                            img.setAttribute('onclick', `showImageInModal('${message.message_image_url}')`);
+                            listItem.appendChild(img);
+                        }
+
+                        if (message.offer) {
+                            const offerCard = document.createElement('div');
+                            offerCard.className = 'card';
+                            offerCard.style = 'background-color: #E9EAEA;'
+
+                            const offerCardBody = document.createElement('div');
+                            offerCardBody.className = 'card-body';
+
+                            const offerCardFlex = document.createElement('div')
+                            offerCardFlex.className = 'd-flex justify-content-between align-items-center';
+
+                            const offerTitle = document.createElement('h5');
+                            offerTitle.className = 'card-title';
+                            offerTitle.textContent = message.offer.title;
+
+                            const offerPrice = document.createElement('span');
+                            offerPrice.className = 'card-text;';
+                            offerPrice.style = 'font-weight: bold;'
+                            offerPrice.textContent = `$${message.offer.price}`;
+
+                            const offerDescription = document.createElement('div');
+                            offerDescription.className = 'card-text';
+                            offerDescription.textContent = `${message.offer.description}`;
+
+                            const hrTag = document.createElement('hr');
+
+                            offerCardFlex.appendChild(offerTitle);  // append to offerCardFlex
+                            offerCardFlex.appendChild(offerPrice);  // append to offerCardFlex
+
+                            const offerLink = document.createElement('a');
+                            offerLink.className = 'btn btn-primary form-control';  // added mt-3 for margin at the top
+                            offerLink.href = `/display_offer/${message.offer.pk}`;  // Replace with the correct link to the offer detail page
+                            offerLink.textContent = 'View Offer';
+
+                            offerCardBody.appendChild(offerCardFlex);  // append offerCardFlex to offerCardBody
+                            
+                            offerCardBody.appendChild(hrTag);
+                            offerCardBody.appendChild(offerDescription);
+
+                            offerCardBody.appendChild(offerLink);
+                            offerCard.appendChild(offerCardBody);
+
+                            listItem.appendChild(offerCard);
+                        }
 
                         messageList.appendChild(listItem);
                     });
@@ -277,6 +388,74 @@
                 });
         }
 
+        document.querySelector('input[id="image"]').addEventListener('change', function () {
+            const imageNameElement = document.getElementById('image-name');
+            const imageIconElement = document.getElementById('image-icon');
+            const unselectImageButton = document.getElementById('unselect-image');
+
+            if (this.files.length > 0) {
+                imageNameElement.textContent = this.files[0].name;
+                imageIconElement.style.display = 'inline-block'; // Show the file icon
+                unselectImageButton.style.display = 'inline-block'; // Show the "Unselect" button
+            } else {
+                imageNameElement.textContent = '';
+                imageIconElement.style.display = 'none'; // Hide the file icon
+                unselectImageButton.style.display = 'none'; // Hide the "Unselect" button
+            }
+        });
+
+        document.getElementById('unselect-image').addEventListener('click', function () {
+            const imageInput = document.querySelector('input[id="image"]');
+            const imageNameElement = document.getElementById('image-name');
+            const imageIconElement = document.getElementById('image-icon');
+            const unselectImageButton = document.getElementById('unselect-image');
+
+            imageInput.value = '';
+            imageNameElement.textContent = '';
+            imageIconElement.style.display = 'none'; // Hide the image icon
+            unselectImageButton.style.display = 'none'; // Hide the "Unselect" button
+        });
+
+        document.querySelector('input[type="file"]').addEventListener('change', function () {
+            const fileNameElement = document.getElementById('file-name');
+            const fileIconElement = document.getElementById('file-icon');
+            const unselectFileButton = document.getElementById('unselect-file');
+
+            if (this.files.length > 0) {
+                fileNameElement.textContent = this.files[0].name;
+                fileIconElement.style.display = 'inline-block'; // Show the file icon
+                unselectFileButton.style.display = 'inline-block'; // Show the "Unselect" button
+            } else {
+                fileNameElement.textContent = '';
+                fileIconElement.style.display = 'none'; // Hide the file icon
+                unselectFileButton.style.display = 'none'; // Hide the "Unselect" button
+            }
+        });
+
+        document.getElementById('unselect-file').addEventListener('click', function () {
+            const fileInput = document.querySelector('input[type="file"]');
+            const fileNameElement = document.getElementById('file-name');
+            const fileIconElement = document.getElementById('file-icon');
+            const unselectFileButton = document.getElementById('unselect-file');
+
+            fileInput.value = '';
+            fileNameElement.textContent = '';
+            fileIconElement.style.display = 'none'; // Hide the file icon
+            unselectFileButton.style.display = 'none'; // Hide the "Unselect" button
+        });
+
+        function showImageInModal(imageUrl) {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = ''; // Clear existing content in the modal body
+
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = "Message Image";
+            img.style.width = '100%'; 
+            img.style.height = 'auto'; 
+
+            modalBody.appendChild(img);
+        }
         function scrollToBottom() {
             const messageContainer = document.querySelector('.modal-body.overflow-auto');
             messageContainer.scrollTop = messageContainer.scrollHeight;

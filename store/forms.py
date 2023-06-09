@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.forms.widgets import ClearableFileInput
 from django.forms import PasswordInput
 
-from .models import Account, Category, Post, Profile, Comment
+from .models import Account, Category, Post, Profile, Comment, Offer
 from ckeditor.fields import RichTextField
 
 class UserSellerRegisterForm(UserCreationForm):
@@ -267,3 +267,16 @@ class ReplyForm(forms.ModelForm):
 
 class PasswordConfirmationForm(forms.Form):
     password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), label='Password')
+
+class OfferForm(forms.ModelForm):
+    title = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control', 
+    }))
+    description = forms.Textarea()
+    price = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control', 
+    }))
+
+    class Meta:
+        model = Offer
+        fields = ("title", "description", "price")

@@ -22,8 +22,9 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 
 from .forms import (UserSellerRegisterForm, UserBuyerRegisterForm, PostForm, UserUpdateForm, 
-                    ProfileUpdateForm, UpdatePostForm, CommentForm, ReplyForm, PasswordConfirmationForm)
-from .models import Post, Category, Profile, Comment, CartItem, Message, Transaction
+                    ProfileUpdateForm, UpdatePostForm, CommentForm, ReplyForm, PasswordConfirmationForm,
+                    OfferForm)
+from .models import Post, Category, Profile, Comment, CartItem, Message, Transaction, Offer
 
 import stripe
 import logging
@@ -670,6 +671,38 @@ def visible_profile(request, username):
     }
     return render(request, 'autho/visible_profile.html', context)
 
+# @login_required
+# def inbox(request):
+#     user = request.user
+#     messages = Message.get_message(user=user)
+#     active_direct = None
+#     directs = None
+
+#     if messages:
+#         message = messages[0]
+#         active_direct = message['user'].username
+#         directs = Message.objects.filter(user=user, reciepient=message['user'])
+#         directs.update(is_read=True)
+
+#         for message in messages:
+#             if message['user'].username == active_direct:
+#                 message['unread'] = 0
+
+#     last_login = user.last_login
+#     current_time = timezone.now()
+#     if current_time - last_login < timezone.timedelta(minutes=5):
+#         is_active = True
+#     else:
+#         is_active = False
+
+#     context = {
+#         'directs': directs,
+#         'active_direct': active_direct,
+#         'messages': messages,
+#         'is_active': is_active,
+#     }
+#     return render(request, 'autho/inbox.html', context)
+
 @login_required
 def inbox(request):
     user = request.user
@@ -694,13 +727,24 @@ def inbox(request):
     else:
         is_active = False
 
+    if request.user.username == active_direct:
+        return redirect('/')
+    
+    sending_message_to = get_object_or_404(User, username=active_direct)
+    offers = Offer.objects.filter(recipient=sending_message_to)
+    user_offers = Offer.objects.filter(user=user)
+
     context = {
+        'sending_message_to': sending_message_to,
         'directs': directs,
         'active_direct': active_direct,
         'messages': messages,
         'is_active': is_active,
+        'offers': offers,
+        'user_offers': user_offers,
     }
     return render(request, 'autho/inbox.html', context)
+
 
 @login_required
 def directs(request, username):
@@ -721,6 +765,12 @@ def directs(request, username):
     for message in messages:
         if message['user'].username == username:
             message['unread'] = 0
+        
+    if request.user.username == username:
+        return redirect('/')
+    
+    offers = Offer.objects.filter(recipient=sending_message_to)
+    user_offers = Offer.objects.filter(user=request.user)
 
     context = {
         'sending_message_to': sending_message_to,
@@ -728,6 +778,8 @@ def directs(request, username):
         'active_direct': active_direct,
         'messages': messages,
         'is_active': is_active,
+        'offers': offers,
+        'user_offers': user_offers,
     }
     return render(request, 'autho/directs.html', context)
 
@@ -737,9 +789,15 @@ def send_message_ajax(request):
         to_user_username = request.POST.get('to_user')
         body = request.POST.get('body')
         file = request.FILES.get('file')
+        message_image = request.FILES.get('message_image')  
+        offer_id = request.POST.get('offer')
+
+        offer = None
+        if offer_id:
+            offer = Offer.objects.get(id=offer_id)
 
         to_user = User.objects.get(username=to_user_username)
-        Message.send_message(from_user, to_user, body, file)
+        Message.send_message(from_user, to_user, body, offer, file, message_image)
 
         return JsonResponse({'status': 'success'})
     else:
@@ -760,10 +818,49 @@ def get_messages_ajax(request, username):
         }
         if direct.file:
             message_data['file_url'] = direct.file.url
+        if direct.message_image:
+            message_data['message_image_url'] = direct.message_image.url
+        if direct.offer:  # Check if the offer attribute exists
+            message_data['offer'] = {
+                'pk': direct.offer.pk,
+                'title': direct.offer.title,
+                'price': direct.offer.price,
+                'description': direct.offer.description,
+                'created': direct.offer.created,
+            }  # Add the offer's id, title, and price to the message_data
         messages.append(message_data)
 
     # print(messages)  # Add this line to print messages data
     return JsonResponse({'messages': messages})
+
+def create_offer(request, username):
+    offer_to = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        form = OfferForm(request.POST)
+        if form.is_valid():
+            offer = form.save(commit=False)
+            offer.user = request.user
+            offer.recipient = offer_to
+            offer.save()
+            return redirect('/')
+    else:
+        form = OfferForm()
+
+    if request.user.username == username:
+        return redirect('/')
+
+    context = {
+        'form': form,
+        'offer_to': offer_to,
+    }
+    return render(request, 'autho/create_offer.html', context)
+
+def display_offer(request, pk):
+    offer = get_object_or_404(Offer, pk=pk)
+    context = {
+        'offer': offer,
+    }
+    return render(request, 'autho/display_offer.html', context) 
 
 @login_required
 def delete_conversation(request, username):

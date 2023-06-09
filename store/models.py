@@ -129,25 +129,35 @@ class CartItem(models.Model):
         return str(self.user) + ' -> ' + str(self.post)
 
 class Message(models.Model):
+    offer = models.ForeignKey('Offer', on_delete=models.SET_NULL, null=True, blank=True)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
     reciepient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
     body = models.TextField()
     file = models.FileField(upload_to='uploads/', null=True, blank=True)
+    message_image = models.ImageField(upload_to='image_sent/', null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
-    def send_message(from_user, to_user, body, file=None):
+    def send_message(from_user, to_user, body, offer=None, file=None, message_image=None):
         sender_message = Message(
             user=from_user,
             sender=from_user,
             reciepient=to_user,
             body=body,
             is_read=True,
+            offer=offer,
+            file=file,  # include this
+            message_image=message_image,  # and this
         )
+
 
         if file:
             sender_message.file = file
+
+        if message_image:
+            sender_message.message_image = message_image
 
         sender_message.save()
 
@@ -157,14 +167,20 @@ class Message(models.Model):
             reciepient=from_user,
             body=body,
             is_read=False,
+            offer=offer,  # include this
+            file=file,  # and this
+            message_image=message_image,  # and this
         )
+
 
         if file:
             recipient_message.file = sender_message.file  # Use the file saved in the sender_message
 
+        if message_image:
+            recipient_message.message_image = message_image
+
         recipient_message.save()
         return sender_message
-    
     def get_message(user):
         users = []
         messages = Message.objects.filter(user=user).values('reciepient').annotate(last=Max('date')).order_by('-last')
@@ -233,3 +249,17 @@ class Message(models.Model):
 
         return unique_conversations
 
+class Offer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_offer')
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient_offer', null=True)  # new field
+    title = models.CharField(max_length=255)
+    description = models.TextField(null=True)  
+    price = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = 'Offers'
+        ordering = ('-created',)
+
+    def __str__(self) -> str:
+        return self.title  

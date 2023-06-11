@@ -1,0 +1,16 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1>Inbox - Mensajes (0)</h1>
+                <hr>
+                <p>No tienes mensajes aún. Vuelve para ver servicios disponibles.</p>
+                <a class="btn btn-primary" href="{% url 'all_posts' %}">servicios disponibles</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

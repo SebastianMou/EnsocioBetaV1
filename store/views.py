@@ -174,10 +174,8 @@ def delete_account(request):
                 return redirect('home_front')
             else:
                 messages.error(request, 'Contraseña incorrecta. Por favor, inténtelo de nuevo.')
-
     else:
         form = PasswordConfirmationForm()
-
     return render(request, 'autho/delete_account.html', {'form': form})
 
 def user_logout(request):
@@ -730,9 +728,13 @@ def inbox(request):
     if request.user.username == active_direct:
         return redirect('/')
     
-    sending_message_to = get_object_or_404(User, username=active_direct)
-    offers = Offer.objects.filter(recipient=sending_message_to)
-    user_offers = Offer.objects.filter(user=user)
+    if active_direct is None:
+        # Return a different response or render a different template
+        return render(request, 'autho/no_messages.html')
+    else:
+        sending_message_to = get_object_or_404(User, username=active_direct)
+        offers = Offer.objects.filter(recipient=sending_message_to)
+        user_offers = Offer.objects.filter(user=user)
 
     context = {
         'sending_message_to': sending_message_to,
@@ -744,7 +746,6 @@ def inbox(request):
         'user_offers': user_offers,
     }
     return render(request, 'autho/inbox.html', context)
-
 
 @login_required
 def directs(request, username):

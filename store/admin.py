@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Account, Post, Category, Comment, CartItem, Message, Transaction
+from .models import Account, Post, Category, Comment, CartItem, Message, Transaction, Offer
 
 # Register your models here.
 class AccountInline(admin.StackedInline):
@@ -26,3 +26,4 @@ admin.site.register(Category)
 admin.site.register(Comment)
 admin.site.register(CartItem)
 admin.site.register(Message)
+admin.site.register(Offer)

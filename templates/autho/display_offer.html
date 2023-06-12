@@ -2,12 +2,35 @@
 {% load static %}
 
 {% block content %}
+
+  
 <br><br>
 <br><br>
-<div class="container">
-    <h1>{{ offer.title }}</h1>
-    <p>{{ offer.description }}</p>
-    <h5>{{ offer.price }}</h5>
-    <a class="btn btn-danger" href="">Buy</a>
+<div style="width: 800px; height: auto;" class="container">
+    <div style="border: 3px solid #012970; border-radius: 8px; padding: 15px; background-color: rgba(95, 95, 95, 0.133);">
+        <center><h1>{{ offer.title }}</h1></center>
+        <hr>
+        <p>{{ offer.description }}</p>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mark</td>
+                <td>Otto</td>
+              </tr>
+              <tr>
+                <td>Precio</td>
+                <td style="color: green;"><b>${{ offer.price }}</b></td>
+              </tr>
+            </tbody>
+          </table>
+        <a class="btn btn-outline-success form-control" href="">Comprar</a>
+    </div>
 </div>
+<br><br>
 {% endblock %}

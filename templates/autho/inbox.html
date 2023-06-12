@@ -6,7 +6,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ensocio.mx</title>
+
+    <link href="{% static 'assets/img/ensocio_logo_tab.jpeg' %}" rel="icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6en6XCp+HHAAK5GSLf2xlYtvJ8U2Q4U+9cuEnJoa3" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap"
@@ -99,7 +102,7 @@
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
             <a href="{% url 'home_front' %}" class="logo d-flex align-items-center">
-                <img src="{% static 'assets/img/logo.png' %}" alt="">
+                <img src="{% static 'assets/img/ensocio_logo.png' %}" alt="">
                 <span>Ensocio</span>
             </a>
 
@@ -235,15 +238,38 @@
                             </ul>
                         </div>
                     </div>
+                    <style>
+                        select#select_offer {
+                            width: 165px;
+                            height: 36px;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 7px;
+                            font-size: 15px;
+                            background-color: #f2f2f2;
+                            color: #444;
+                        }
+                    </style>
                     <div class="send-box">
-                        {% if request.user.account.freelancer_key %}
-                            <a class="btn btn-outline-success btn-sm" href="{% url 'create_offer' sending_message_to.username %}">Crear una oferta</a>
-                        {% endif %}  
+                        <div class="row">
+                            <div class="col">
+                                {% if request.user.account.freelancer_key %}
+                                    <a class="btn btn-outline-success btn-sm" href="{% url 'create_offer' sending_message_to.username %}">Crear Una Oferta</a>
+                                {% endif %}  
+                            </div>
+                            <div class="col text-end">
+                                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+                                        <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                         <form role="form" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             {% if request.user.account.freelancer_key %}
                                 <select id="select_offer" name="offer">
-                                    <option value="">Select offer</option>
+                                    <option value="">Elegir oferta</option>
                                     {% for offer in user_offers %}
                                         <option value="{{ offer.id }}">{{ offer.title|slice:":10" }}...</option>
                                     {% endfor %}
@@ -251,7 +277,7 @@
                             {% endif %}                       
                             
                             <input type="hidden" name="to_user" id="" value="{{ active_direct }}">
-                            <input name="body" type="text" id="" value="" class="form-control" placeholder="typ message">
+                            <input name="body" type="text" id="" value="" class="form-control" placeholder="Escriba mensaje">
 
                             <input type="file" name="file" id="file" style="display:none;" />
                             <label class="btn btn-warning btn-sm" for="file" class="file-label">
@@ -263,7 +289,7 @@
                                 <i class="bi bi-card-image" aria-hidden="true"></i>
                             </label>
 
-                            <button type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i>Send</button>
+                            <button type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                         </form>
                         <div class="d-flex">
                             <i id="file-icon" class="bi bi-file-earmark-arrow-down" style="display: none;"></i>
@@ -281,58 +307,49 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- ########################################################## CALCULATOR & SIDEBAR ####################################################### -->
-            <div class="container">
-                <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-                        aria-controls="offcanvasRight">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
-                            <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"/>
-                            </svg>
-                    </button>
-                </div>
-            
-                <div class="offcanvas offcanvas-end custom-width" tabindex="-1" id="offcanvasRight"
-                    aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false">
-                    <div class="offcanvas-header">
-                        <h5 id="offcanvasRightLabel">Sidebar</h5>
-                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <div class="ccc" style="border: 2px solid black;">
-                            <div class="output">
-                                <div data-previous-operand class="previous"></div>
-                                <div data-current-operand class="current-operand"></div>
-                            </div>
-                            <div class="calculator-keys">
-                                <button class="buttonClass span-two" data-all-clear>AC</button>
-                                <button class="buttonClass" data-delete>DEL</button>
-                                <button class="buttonClass" data-operation>÷</button>
-                                <button class="buttonClass" data-number>1</button>
-                                <button class="buttonClass" data-number>2</button>
-                                <button class="buttonClass" data-number>3</button>
-                                <button class="buttonClass" data-operation>x</button>
-                                <button class="buttonClass" data-number>4</button>
-                                <button class="buttonClass" data-number>5</button>
-                                <button class="buttonClass" data-number>6</button>
-                                <button class="buttonClass" data-operation>+</button>
-                                <button class="buttonClass" data-number>7</button>
-                                <button class="buttonClass" data-number>8</button>
-                                <button class="buttonClass" data-number>9</button>
-                                <button class="buttonClass" data-operation>-</button>
-                                <button class="buttonClass" data-number>.</button>
-                                <button class="buttonClass" data-number>0</button>
-                                <button class="buttonClass span-two" data-equals>=</button>
-                            </div>                                
+                <!-- ########################################################## CALCULATOR & SIDEBAR ####################################################### -->
+                <div class="container">
+                    <div class="offcanvas offcanvas-end custom-width" tabindex="-1" id="offcanvasRight"
+                        aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false">
+                        <div class="offcanvas-header">
+                            <h5 id="offcanvasRightLabel">Sidebar</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
-                        <br>
-                        <small style="font-size: smaller;"><b style="color: red;">Advertencia:</b> Notas (Cualquier información introducida aquí no se guardará una vez que se actualice o reinicie la página)</small>
-                        <textarea placeholder="Notas (La información aquí no se guarda tras refrescar la página)" id="" style="width: 348px;" rows="10"></textarea>
+                        <div class="offcanvas-body">
+                            <div class="ccc" style="border: 2px solid black;">
+                                <div class="output">
+                                    <div data-previous-operand class="previous"></div>
+                                    <div data-current-operand class="current-operand"></div>
+                                </div>
+                                <div class="calculator-keys">
+                                    <button class="buttonClass span-two" data-all-clear>AC</button>
+                                    <button class="buttonClass" data-delete>DEL</button>
+                                    <button class="buttonClass" data-operation>÷</button>
+                                    <button class="buttonClass" data-number>1</button>
+                                    <button class="buttonClass" data-number>2</button>
+                                    <button class="buttonClass" data-number>3</button>
+                                    <button class="buttonClass" data-operation>x</button>
+                                    <button class="buttonClass" data-number>4</button>
+                                    <button class="buttonClass" data-number>5</button>
+                                    <button class="buttonClass" data-number>6</button>
+                                    <button class="buttonClass" data-operation>+</button>
+                                    <button class="buttonClass" data-number>7</button>
+                                    <button class="buttonClass" data-number>8</button>
+                                    <button class="buttonClass" data-number>9</button>
+                                    <button class="buttonClass" data-operation>-</button>
+                                    <button class="buttonClass" data-number>.</button>
+                                    <button class="buttonClass" data-number>0</button>
+                                    <button class="buttonClass span-two" data-equals>=</button>
+                                </div>                                
+                            </div>
+                            <br>
+                            <small style="font-size: smaller;"><b style="color: red;">Advertencia:</b> Notas (Cualquier información introducida aquí no se guardará una vez que se actualice o reinicie la página)</small>
+                            <textarea placeholder="Notas (La información aquí no se guarda tras refrescar la página)" id="" style="width: 348px;" rows="10"></textarea>
+                        </div>
                     </div>
                 </div>
+                <!-- ########################################################## CALCULATOR & SIDEBAR ####################################################### -->
             </div>
-        <!-- ########################################################## CALCULATOR & SIDEBAR ####################################################### -->
         </div>
     </div>
     <!-- Button trigger modal -->
@@ -511,7 +528,7 @@
                             const offerLink = document.createElement('a');
                             offerLink.className = 'btn btn-primary form-control';  // added mt-3 for margin at the top
                             offerLink.href = `/display_offer/${message.offer.pk}`;  // Replace with the correct link to the offer detail page
-                            offerLink.textContent = 'View Offer';
+                            offerLink.textContent = 'Ver Oferta';
 
                             offerCardBody.appendChild(offerCardFlex);  // append offerCardFlex to offerCardBody
                             

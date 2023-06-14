@@ -451,6 +451,36 @@ def create_checkout_session(request, pk):
     else:
         return JsonResponse({'error': 'Invalid request method'})
 
+def create_checkout_session_offer(request, pk):
+    product = get_object_or_404(Offer, pk=pk)
+    ng = "https://ensocio.herokuapp.com"
+    if request.method == 'POST':
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        quantity = int(request.POST.get('quantity', 1))
+        name = f"{product.user} - {product.title}"
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'mxn',
+                        'unit_amount': product.price,
+                        'product_data': {
+                            'name': name,
+                            'description': product.category,
+                        },
+                    },
+                    'quantity': quantity,
+                },
+            ],
+            mode='payment',
+            success_url=ng + '/checkout_success',
+            cancel_url=ng + '/checkout_cancel',
+        )
+        return redirect(checkout_session.url)
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+
 def post_like(request, pk):
     post = get_object_or_404(Post, id=pk)
     if request.user in post.likes.all():
@@ -669,38 +699,6 @@ def visible_profile(request, username):
     }
     return render(request, 'autho/visible_profile.html', context)
 
-# @login_required
-# def inbox(request):
-#     user = request.user
-#     messages = Message.get_message(user=user)
-#     active_direct = None
-#     directs = None
-
-#     if messages:
-#         message = messages[0]
-#         active_direct = message['user'].username
-#         directs = Message.objects.filter(user=user, reciepient=message['user'])
-#         directs.update(is_read=True)
-
-#         for message in messages:
-#             if message['user'].username == active_direct:
-#                 message['unread'] = 0
-
-#     last_login = user.last_login
-#     current_time = timezone.now()
-#     if current_time - last_login < timezone.timedelta(minutes=5):
-#         is_active = True
-#     else:
-#         is_active = False
-
-#     context = {
-#         'directs': directs,
-#         'active_direct': active_direct,
-#         'messages': messages,
-#         'is_active': is_active,
-#     }
-#     return render(request, 'autho/inbox.html', context)
-
 @login_required
 def inbox(request):
     user = request.user
@@ -843,7 +841,7 @@ def create_offer(request, username):
             offer.user = request.user
             offer.recipient = offer_to
             offer.save()
-            return redirect('/')
+            return redirect('inbox')
     else:
         form = OfferForm()
 

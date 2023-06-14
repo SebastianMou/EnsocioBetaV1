@@ -269,14 +269,44 @@ class PasswordConfirmationForm(forms.Form):
     password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control'}), label='Password')
 
 class OfferForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=forms.Select(attrs={
+        'class': 'form-control',
+    }), empty_label=None)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].choices = [('','Buscar categoría escribiendo')] + list(self.fields['category'].choices)[1:]
+    
     title = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control', 
     }))
-    description = forms.Textarea()
+    description = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'rows': 3,
+        'placeholder': 'Enter description here...'
+    }))
+    quantity = forms.IntegerField(min_value=1, max_value=100)
+
     price = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control', 
+    }))
+    STATUS_CHOICES = (
+        ('1 día', '1 día'),
+        ('2 días', '2 días'),
+        ('3 días', '3 días'),
+        ('4 días', '4 días'),
+        ('5 días', '5 días'),
+        ('6 días', '6 días'),
+        ('1 semana', '1 semana'),
+        ('2 semanas', '2 semanas'),
+        ('3 semanas', '3 semanas'),
+        ('1 mes', '1 mes'),
+        ('2 meses', '2 meses'),
+    )
+    delivery_time = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.Select(attrs={
         'class': 'form-control', 
     }))
 
     class Meta:
         model = Offer
-        fields = ("title", "description", "price")
+        fields = ("category", "title", "description", "quantity", "price")

@@ -5,10 +5,14 @@
 <br><br>
 <br><br>
 <div class="container">
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-danger" type="submit" value="offer">
-    </form>
+    <div class="card">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="btn btn-danger form-control" type="submit" value="crear oferta">
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

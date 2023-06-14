@@ -1,35 +1,47 @@
 {% extends '../base.html' %}
 {% load static %}
-
 {% block content %}
-
-  
 <br><br>
 <br><br>
 <div style="width: 800px; height: auto;" class="container">
-    <div style="border: 3px solid #012970; border-radius: 8px; padding: 15px; background-color: rgba(95, 95, 95, 0.133);">
+    <div style="border: 3px solid #012970; border-radius: 8px; padding: 15px; background-color: rgba(199, 198, 198, 0.133);">
         <center><h1>{{ offer.title }}</h1></center>
         <hr>
         <p>{{ offer.description }}</p>
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
+                <th scope="col">Atributo</th>
+                <th scope="col">Detalles</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Mark</td>
-                <td>Otto</td>
+                <td>Enviado</td>
+                <td>{{ offer.user }} <i class="bi bi-arrow-right-short"></i> {{ offer.recipient }}</td>
+              </tr>
+              <tr>
+                <td>Cantidad</td>
+                <td>{{ offer.quantity }} <i class="bi bi-box-seam"></i></td>
+              </tr>
+              <tr>
+                <td>Fecha de Entrega</td>
+                <td>{{ offer.delivery_time }} <i class="bi bi-clock-history"></i></td>
+              </tr>
+              <tr>
+                <td>Creado</td>
+                <td>{{ offer.created }}</td>
               </tr>
               <tr>
                 <td>Precio</td>
-                <td style="color: green;"><b>${{ offer.price }}</b></td>
+                <td style="color: green;"><b>${{ offer.get_display_price }}</b></td>
               </tr>
             </tbody>
           </table>
-        <a class="btn btn-outline-success form-control" href="">Comprar</a>
+        <form action="{% url 'create_checkout_session_offer' offer.pk %}" method="POST">
+          {% csrf_token %}
+          <button class="btn btn-primary form-control" type="submit" id="checkout-button">Comprar ahorita</button>
+        </form>
     </div>
 </div>
 <br><br>

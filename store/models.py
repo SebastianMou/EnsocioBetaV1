@@ -107,7 +107,6 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.buyer.username} purchased {self.quantity} of {self.post.title} from {self.seller.username}"
 
-
 class Comment(models.Model):
     product = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -250,16 +249,35 @@ class Message(models.Model):
         return unique_conversations
 
 class Offer(models.Model):
+    category = models.ForeignKey(Category, related_name='offer_product', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_offer')
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient_offer', null=True)  # new field
     title = models.CharField(max_length=255)
     description = models.TextField(null=True)  
+    quantity = models.PositiveIntegerField(default=1, null=True)
     price = models.IntegerField()
+    STATUS_CHOICES = (
+        ('1 día', '1 día'),
+        ('2 días', '2 días'),
+        ('3 días', '3 días'),
+        ('4 días', '4 días'),
+        ('5 días', '5 días'),
+        ('6 días', '6 días'),
+        ('1 semana', '1 semana'),
+        ('2 semanas', '2 semanas'),
+        ('3 semanas', '3 semanas'),
+        ('1 mes', '1 mes'),
+        ('2 meses', '2 meses'),
+    )
+    delivery_time = models.CharField(max_length=20, choices=STATUS_CHOICES, default='1 día', null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Offers'
         ordering = ('-created',)
 
+    def get_display_price(self):
+        return "{0:.2f}".format(self.price / 100)
+
     def __str__(self) -> str:
-        return self.title  
+        return str(self.user) + ' -> ' + str(self.recipient) + ' | ' + str(self.title) + ' | ' + str(self.quantity)

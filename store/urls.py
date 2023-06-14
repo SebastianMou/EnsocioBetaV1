@@ -40,6 +40,7 @@ urlpatterns = [
 
     # Stripe Payment connection
     path('create_checkout_session/<int:pk>/', views.create_checkout_session, name='create_checkout_session'),
+    path('create_checkout_session_offer/<int:pk>/', views.create_checkout_session_offer, name='create_checkout_session_offer'),
     path('checkout_success/', views.checkout_success, name='checkout_success'),
     path('checkout_cancel/', views.checkout_cancel, name='checkout_cancel'),
     path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook'),

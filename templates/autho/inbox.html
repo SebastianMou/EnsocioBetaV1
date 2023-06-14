@@ -212,7 +212,7 @@
                                                             <span class="card-text">${{ direct.offer.price }}</span>
                                                         </div>
                                                         <hr>
-                                                        <div class="card-text">{{ direct.offer.description }}</div>
+                                                        <div class="card-text">{{ direct.offer.description }}...</div>
                                                         <a href="/offers/{{ direct.offer.id }}" class="btn btn-primary mt-3">View Offer</a>    
                                                     </div>
                                                 </div>
@@ -518,7 +518,7 @@
 
                             const offerDescription = document.createElement('div');
                             offerDescription.className = 'card-text';
-                            offerDescription.textContent = `${message.offer.description}`;
+                            offerDescription.textContent = `${message.offer.description.substring(0, 203)}...`;
 
                             const hrTag = document.createElement('hr');
 

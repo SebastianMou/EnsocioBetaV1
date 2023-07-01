@@ -19,6 +19,13 @@
             Gracias por elegir nuestra plataforma como su proveedor de servicios de confianza, y le deseamos todo lo mejor en sus futuros proyectos.
         </p>
         <form method="post">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-primary" role="alert">{{ message }}</div>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             {% csrf_token %}
             <div class="form-group">
                 {{ form.password.label_tag }} {{ form.password }}

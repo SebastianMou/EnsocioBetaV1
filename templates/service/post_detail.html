@@ -192,7 +192,7 @@
                     <div class="d-flex">
                       <time datetime="2020-01-01">{{ comment.created_at|naturaltime }}</time>
                         {% if request.user == comment.author %}
-                        <form method="POST" action="{% url 'comment_delete' comment.pk %}">
+                        <form method="POST" onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');" action="{% url 'comment_delete' comment.pk %}">
                           {% csrf_token %}
                           <button style="margin-top: -10px;" type="submit" class="btn btn-link">
                             <i class="bi bi-trash3"></i>
@@ -234,7 +234,7 @@
                           <div class="d-flex">
                             <time datetime="2020-01-01">{{ reply.created_at|naturaltime }}</time>
                             {% if request.user == reply.author %}
-                              <form method="POST" action="{% url 'comment_delete' reply.pk %}">
+                              <form method="POST" onclick="return confirm('¿Estás seguro de que deseas eliminar este comentario?');" action="{% url 'comment_delete' reply.pk %}">
                                 {% csrf_token %}
                                 <button style="margin-top: -10px;" type="submit" class="btn btn-link">
                                   <i class="bi bi-trash3"></i>

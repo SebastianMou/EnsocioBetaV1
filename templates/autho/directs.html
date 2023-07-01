@@ -328,7 +328,7 @@
                     <div class="offcanvas offcanvas-end custom-width" tabindex="-1" id="offcanvasRight"
                         aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false">
                         <div class="offcanvas-header">
-                            <h5 id="offcanvasRightLabel">Sidebar</h5>
+                            <h5 id="offcanvasRightLabel">Herramientas</h5>
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
@@ -534,7 +534,7 @@
 
                             const offerDescription = document.createElement('div');
                             offerDescription.className = 'card-text';
-                            offerDescription.textContent = `${message.offer.description}`;
+                            offerDescription.textContent = `${message.offer.description.substring(0, 203)}...`;
 
                             const hrTag = document.createElement('hr');
 

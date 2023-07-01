@@ -52,8 +52,8 @@ def home(request):
         send_mail(data['complaint'], message, '', ['ensocio.mx@gmail.com'])
 
     categories = Category.objects.filter(
-        Q(name__startswith='Servicios de voz') | Q(name__startswith='Diseño gráfico') |
-        Q(name__startswith='Servicios de SEO')
+        Q(name__startswith='MARKETING') | Q(name__startswith='Diseños y graficos') |
+        Q(name__startswith='NEGOCIOS')
     )[:3]
     context = {
         'categories': categories,
@@ -81,8 +81,8 @@ def home_front(request):
         send_mail(data['complaint'], message, '', ['ensocio.mx@gmail.com'])
 
     categories = Category.objects.filter(
-        Q(name__startswith='Servicios de voz') | Q(name__startswith='Diseño gráfico') |
-        Q(name__startswith='Servicios de SEO')
+        Q(name__startswith='MARKETING') | Q(name__startswith='Diseños y graficos') |
+        Q(name__startswith='NEGOCIOS')
     )[:3]
     context = {
         'categories': categories,

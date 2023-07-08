@@ -46,7 +46,7 @@
             <nav id="navbar" class="navbar">
                 <ul>
                     <li>
-                        <form action="{% url 'search' %}" method="POST">
+                        <form action="{% url 'search' %}" method="GET">
                             {% csrf_token %}
                             <div class="d-flex">
                                 <input style="width: 22rem;" name="search" type="text" class="form-control" placeholder="Busca un Servicio">

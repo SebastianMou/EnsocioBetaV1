@@ -29,7 +29,7 @@
               {% endfor %}
             </div>
 
-            <form action="{% url 'search' %}" method="POST" class="d-flex">
+            <form action="{% url 'search' %}" method="GET" class="d-flex">
               {% csrf_token %}
               <input class="form-control me-2" name="search" type="search" placeholder="Buscar" aria-label="Search">
               <button class="btn btn-outline-success" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -379,55 +379,55 @@
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
             <div class="service-box blue">
-              <i class="ri-discuss-line icon"></i>
-              <h3>Diseños y graficos</h3>
+              <i class="ri-pen-nib-fill icon"></i>
+              <h3>{{ Disenos_y_graficos.name }}</h3>
               <p align="justify" >Nuestro servicio de diseño proporciona soluciones visuales de alta calidad, incluyendo logotipos, materiales impresos y gráficos para redes sociales, para potenciar tu marca.</p>
-              <a href="#" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
+              <a href="{% url 'category_list' pk=Disenos_y_graficos.id %}" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
             <div class="service-box orange">
-              <i class="ri-discuss-line icon"></i>
-              <h3>Programación y tecnología</h3>
+              <i class="ri-code-s-slash-line icon"></i>
+              <h3>{{ Programacoin_y_tecnologia.name }}</h3>
               <p align="justify">Nuestro equipo experto desarrolla soluciones personalizadas de programación, incluyendo aplicaciones, sitios web y comercio electrónico, según tus necesidades.</p>
-              <a href="#" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
+              <a href="{% url 'category_list' pk=Programacoin_y_tecnologia.id %}" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
             <div class="service-box green">
-              <i class="ri-discuss-line icon"></i>
-              <h3>Música y audio</h3>
+              <i class="ri-music-2-line icon"></i>
+              <h3>{{ Musica_y_audio.name }}</h3>
               <p align="justify">Proporcionamos servicios de música y audio, incluyendo composición, producción de pistas, grabaciones de voz y mezclas profesionales, para enriquecer tus proyectos creativos.</p>
-              <a href="#" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
+              <a href="{% url 'category_list' pk=Musica_y_audio.id %}" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
             <div class="service-box red">
-              <i class="ri-discuss-line icon"></i>
-              <h3>Negocios</h3>
+              <i class="ri-building-2-line icon"></i>
+              <h3>{{ Negocios.name }}</h3>
               <p align="justify">Ofrecemos asesoramiento en negocios, estrategias empresariales, gestión de proyectos y planes de negocios para impulsar el crecimiento de tu empresa.</p>
-              <a href="#" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
+              <a href="{% url 'category_list' pk=Negocios.id %}" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
             <div class="service-box purple">
-              <i class="ri-discuss-line icon"></i>
-              <h3>Video y animación</h3>
+              <i class="ri-video-line icon"></i>
+              <h3>{{ Video_y_animacion.name }}</h3>
               <p align="justify">Ofrecemos servicios de video y animación, incluyendo videos promocionales y animaciones impactantes, para captar la atención de tu audiencia y transmitir tus ideas de manera atractiva.</p>
-              <a href="#" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
+              <a href="{% url 'category_list' pk=Video_y_animacion.id %}" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="700">
             <div class="service-box pink">
-              <i class="ri-discuss-line icon"></i>
-              <h3>Marketing</h3>
+              <i class="ri-team-line icon"></i>
+              <h3>{{ Marketing.name }}</h3>
               <p align="justify">Con nuestras estrategias de marketing y publicidad en línea, maximizamos tu visibilidad, atraemos clientes y aumentamos tus ventas.</p>
-              <a href="#" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
+              <a href="{% url 'category_list' pk=Marketing.id %}" class="read-more"><span>Leer Mas</span> <i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
 
@@ -735,7 +735,7 @@
     <!-- ======= End Clients Section ======= -->
 
     <!-- ======= Recent Blog Posts Section ======= -->
-    <section id="recent-blog-posts" class="recent-blog-posts">
+    <!-- <section id="recent-blog-posts" class="recent-blog-posts">
 
       <div class="container" data-aos="fade-up">
 
@@ -777,7 +777,8 @@
 
       </div>
 
-    </section><!-- End Recent Blog Posts Section -->
+    </section> -->
+    <!-- End Recent Blog Posts Section -->
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">

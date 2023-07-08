@@ -55,8 +55,32 @@ def home(request):
         Q(name__startswith='MARKETING') | Q(name__startswith='Diseños y graficos') |
         Q(name__startswith='NEGOCIOS')
     )[:3]
+    Disenos_y_graficos = Category.objects.filter(
+        Q(name__startswith='Diseños y graficos')
+    ).first()
+    Programacoin_y_tecnologia = Category.objects.filter(
+        Q(name__startswith='Programación y tecnología')
+    ).first()
+    Musica_y_audio = Category.objects.filter(
+        Q(name__startswith='Música y audio')
+    ).first()
+    Negocios = Category.objects.filter(
+        Q(name__startswith='Negocios')
+    ).first()
+    Video_y_animacion = Category.objects.filter(
+        Q(name__startswith='Video y animación')
+    ).first()
+    Marketing = Category.objects.filter(
+        Q(name__startswith='Marketing')
+    ).first()
     context = {
         'categories': categories,
+        'Programacoin_y_tecnologia': Programacoin_y_tecnologia,
+        'Disenos_y_graficos': Disenos_y_graficos,
+        'Musica_y_audio': Musica_y_audio,
+        'Negocios': Negocios,
+        'Video_y_animacion': Video_y_animacion,
+        'Marketing': Marketing,
     }
     return render(request, 'home.html', context)
 
@@ -84,8 +108,37 @@ def home_front(request):
         Q(name__startswith='MARKETING') | Q(name__startswith='Diseños y graficos') |
         Q(name__startswith='NEGOCIOS')
     )[:3]
+    categories = Category.objects.filter(
+        Q(name__startswith='MARKETING') | Q(name__startswith='Diseños y graficos') |
+        Q(name__startswith='NEGOCIOS')
+    )[:3]
+    Disenos_y_graficos = Category.objects.filter(
+        Q(name__startswith='Diseños y graficos')
+    ).first()
+    Programacoin_y_tecnologia = Category.objects.filter(
+        Q(name__startswith='Programación y tecnología')
+    ).first()
+    Musica_y_audio = Category.objects.filter(
+        Q(name__startswith='Música y audio')
+    ).first()
+    Negocios = Category.objects.filter(
+        Q(name__startswith='Negocios')
+    ).first()
+    Video_y_animacion = Category.objects.filter(
+        Q(name__startswith='Video y animación')
+    ).first()
+    Marketing = Category.objects.filter(
+        Q(name__startswith='Marketing')
+    ).first()
     context = {
         'categories': categories,
+        'Programacoin_y_tecnologia': Programacoin_y_tecnologia,
+        'Disenos_y_graficos': Disenos_y_graficos,
+        'Musica_y_audio': Musica_y_audio,
+        'Negocios': Negocios,
+        'Video_y_animacion': Video_y_animacion,
+        'Marketing': Marketing,
+
     }
     return render(request, 'home_front.html', context)
 
